@@ -32,10 +32,8 @@ shape = SubResource("Shape_player")
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 
-[node name="PresidenciaMunicipal" type="Sprite2D" parent="."]
+[node name="PresidenciaMunicipal" type="Node2D" parent="."]
 position = Vector2(200, 0)
-scale = Vector2(0.25, 0.25)
-texture = ExtResource("2_0xm2m")
 script = ExtResource("3_h2yge")
 
 [node name="InteractionArea" type="Area2D" parent="PresidenciaMunicipal"]
@@ -43,10 +41,8 @@ script = ExtResource("3_h2yge")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PresidenciaMunicipal/InteractionArea"]
 shape = SubResource("Shape_interact")
 
-[node name="MercadoMunicipal" type="Sprite2D" parent="."]
+[node name="MercadoMunicipal" type="Node2D" parent="."]
 position = Vector2(-200, 0)
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("2_0xm2m")
 script = ExtResource("3_h2yge")
 
 [node name="InteractionArea" type="Area2D" parent="MercadoMunicipal"]
@@ -54,10 +50,8 @@ script = ExtResource("3_h2yge")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MercadoMunicipal/InteractionArea"]
 shape = SubResource("Shape_interact")
 
-[node name="ParqueCentral" type="Sprite2D" parent="."]
+[node name="ParqueCentral" type="Node2D" parent="."]
 position = Vector2(0, 200)
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("2_0xm2m")
 script = ExtResource("3_h2yge")
 
 [node name="InteractionArea" type="Area2D" parent="ParqueCentral"]
@@ -65,10 +59,8 @@ script = ExtResource("3_h2yge")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ParqueCentral/InteractionArea"]
 shape = SubResource("Shape_interact")
 
-[node name="OficinasSAT" type="Sprite2D" parent="."]
+[node name="OficinasSAT" type="Node2D" parent="."]
 position = Vector2(400, 0)
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("2_0xm2m")
 script = ExtResource("3_h2yge")
 
 [node name="InteractionArea" type="Area2D" parent="OficinasSAT"]
@@ -76,10 +68,8 @@ script = ExtResource("3_h2yge")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="OficinasSAT/InteractionArea"]
 shape = SubResource("Shape_interact")
 
-[node name="Hospital" type="Sprite2D" parent="."]
+[node name="Hospital" type="Node2D" parent="."]
 position = Vector2(0, -200)
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("2_0xm2m")
 script = ExtResource("3_h2yge")
 
 [node name="InteractionArea" type="Area2D" parent="Hospital"]
@@ -87,10 +77,8 @@ script = ExtResource("3_h2yge")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hospital/InteractionArea"]
 shape = SubResource("Shape_interact")
 
-[node name="Banco" type="Sprite2D" parent="."]
+[node name="Banco" type="Node2D" parent="."]
 position = Vector2(-200, -200)
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("2_0xm2m")
 script = ExtResource("3_h2yge")
 
 [node name="InteractionArea" type="Area2D" parent="Banco"]

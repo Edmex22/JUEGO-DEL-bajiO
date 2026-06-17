@@ -1,4 +1,4 @@
-extends Sprite2D
+extends Node2D
 
 enum TipoEdificio { PRESIDENCIA, MERCADO, PARQUE, SAT, HOSPITAL, BANCO }
 
@@ -184,3 +184,96 @@ func _on_body_exited(body: Node2D) -> void:
 		panel_open    = false
 		if interaction_label: interaction_label.visible = false
 		if government_panel:  government_panel.visible  = false
+
+
+# ── Sprite pixel-art dibujado en código ───────────────────────────────────────
+func _draw() -> void:
+	match tipo:
+		TipoEdificio.PRESIDENCIA: _draw_presidencia()
+		TipoEdificio.MERCADO:     _draw_mercado()
+		TipoEdificio.PARQUE:      _draw_parque()
+		TipoEdificio.SAT:         _draw_sat()
+		TipoEdificio.HOSPITAL:    _draw_hospital()
+		TipoEdificio.BANCO:       _draw_banco()
+	# Nombre del edificio debajo
+	var font := ThemeDB.fallback_font
+	draw_string(font, Vector2(-40, 54), nombre_edificio,
+		HORIZONTAL_ALIGNMENT_LEFT, 80, 10, Color("#F5F0E8"))
+
+
+func _r(x:float,y:float,w:float,h:float,c:String) -> void:
+	draw_rect(Rect2(x, y, w, h), Color(c))
+
+
+func _draw_presidencia() -> void:
+	_r(-44,-40, 88, 80, "#C0392B")   # cuerpo
+	_r(-48,-44, 96,  8, "#8B2020")   # techo
+	_r(-36,-30, 12, 30, "#8B2020")   # columna izq
+	_r( 24,-30, 12, 30, "#8B2020")   # columna der
+	_r( -8,-30, 16, 20, "#1A1A1A")   # puerta
+	_r(-28,-24, 12, 12, "#F39C12")   # ventana izq
+	_r( 16,-24, 12, 12, "#F39C12")   # ventana der
+	_r(-20,-52, 40,14, "#E74C3C")    # bandera
+	_r(-20,-52,  6, 6, "#2ECC71")
+
+
+func _draw_mercado() -> void:
+	_r(-40,-30, 80, 60, "#E67E22")   # cuerpo naranja
+	_r(-44,-36, 88, 10, "#C0392B")   # toldo rojo
+	_r(-36,-36, 12, 10, "#E74C3C")   # franja toldo
+	_r(  0,-36, 12, 10, "#E74C3C")
+	_r(-28,-20, 20, 28, "#1A1A1A")   # puerta
+	_r( 10,-20, 20, 16, "#F5F0E8")   # vitrina
+	_r(-44, 24, 88,  6, "#8B4513")   # base
+
+
+func _draw_parque() -> void:
+	_r(-44,-10, 88, 40, "#27AE60")   # pasto
+	# Árbol izquierdo
+	_r(-30,-40, 18, 30, "#1E8449")
+	_r(-24,-50, 10, 14, "#27AE60")
+	_r(-26,-10,  6, 28, "#8B4513")
+	# Árbol derecho
+	_r( 12,-40, 18, 30, "#1E8449")
+	_r( 16,-50, 10, 14, "#27AE60")
+	_r( 20,-10,  6, 28, "#8B4513")
+	# Banca
+	_r( -8, 10, 16,  4, "#F5F0E8")
+	_r( -8, 14,  4,  8, "#888888")
+	_r( 10, 14,  4,  8, "#888888")
+
+
+func _draw_sat() -> void:
+	_r(-40,-36, 80, 72, "#2C2C2C")   # cuerpo gris oscuro
+	_r(-44,-40, 88,  8, "#1A1A1A")   # techo
+	_r(-36,-28, 72,  6, "#E74C3C")   # franja roja
+	_r(-10,-30,  20,36, "#1A1A1A")   # puerta
+	_r(-32,-18, 16, 14, "#3498DB")   # ventana izq
+	_r( 16,-18, 16, 14, "#3498DB")   # ventana der
+	# Letrero SAT
+	_r(-20,-40, 40, 10, "#E74C3C")
+	var font := ThemeDB.fallback_font
+	draw_string(font, Vector2(-14,-33), "SAT", HORIZONTAL_ALIGNMENT_LEFT, 40, 9, Color("#F5F0E8"))
+
+
+func _draw_hospital() -> void:
+	_r(-40,-36, 80, 72, "#F5F0E8")   # cuerpo blanco hueso
+	_r(-44,-40, 88,  8, "#2ECC71")   # techo verde
+	_r(-10,-30, 20, 36, "#1A1A1A")   # puerta
+	_r(-30,-20, 18, 14, "#3498DB")   # ventana izq
+	_r( 12,-20, 18, 14, "#3498DB")   # ventana der
+	# Cruz roja
+	_r( -5,-38, 10, 28, "#E74C3C")
+	_r(-14,-27, 28, 10, "#E74C3C")
+
+
+func _draw_banco() -> void:
+	_r(-40,-36, 80, 72, "#3498DB")   # cuerpo azul
+	_r(-44,-40, 88, 10, "#1A4F7A")   # techo
+	# Columnas
+	for i in range(3):
+		_r(-32 + i*22, -30, 10, 50, "#1A4F7A")
+	_r(-10,-28, 20, 34, "#1A1A1A")   # puerta
+	# Símbolo $
+	var font := ThemeDB.fallback_font
+	draw_string(font, Vector2(-10,-42), "$", HORIZONTAL_ALIGNMENT_LEFT, 24, 22, Color("#F39C12"))

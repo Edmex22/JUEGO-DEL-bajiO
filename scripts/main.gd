@@ -6,7 +6,6 @@ extends Node2D
 
 func _ready() -> void:
 	eventos.evento_disparado.connect(_on_evento)
-	# Configurar tipo e nombre de cada edificio
 	_init_edificio($PresidenciaMunicipal, 0, "Presidencia Municipal")
 	_init_edificio($MercadoMunicipal,     1, "Mercado Municipal")
 	_init_edificio($ParqueCentral,        2, "Parque Central")
@@ -15,11 +14,20 @@ func _ready() -> void:
 	_init_edificio($Banco,                5, "Banco Municipal")
 
 
-func _init_edificio(nodo: Sprite2D, tipo: int, nombre: String) -> void:
+func _init_edificio(nodo: Node2D, tipo: int, nombre: String) -> void:
 	if nodo == null:
 		return
 	nodo.tipo = tipo
 	nodo.nombre_edificio = nombre
+
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo:
+		match event.physical_keycode:
+			KEY_F5:
+				Guardado.guardar()
+			KEY_F6:
+				Guardado.cargar()
 
 
 func _on_evento(titulo: String, descripcion: String, opciones: Array) -> void:
