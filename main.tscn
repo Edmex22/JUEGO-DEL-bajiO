@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dnsqh6qnwglrp" path="res://scripts/player.gd.gd" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://c62y4blrnh188" path="res://icon.svg" id="2_0xm2m"]
 [ext_resource type="Script" uid="uid://dfgjnw1ytd3iq" path="res://scripts/building_interaction.gd" id="3_h2yge"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="4_hud"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0xm2m"]
 size = Vector2(16, 16)
@@ -10,59 +11,72 @@ size = Vector2(16, 16)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h2yge"]
 size = Vector2(64, 64)
 
-[node name="Main" type="Node2D" unique_id=1426920011]
+[node name="Main" type="Node2D"]
 
-[node name="Player" type="CharacterBody2D" parent="." unique_id=6197516 groups=["player"]]
+[node name="Player" type="CharacterBody2D" parent="." groups=["player"]]
 script = ExtResource("1_ig7tw")
 
-[node name="Sprite2D" type="Sprite2D" parent="Player" unique_id=1016965755]
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
 scale = Vector2(0.15, 0.15)
 texture = ExtResource("2_0xm2m")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=356342745]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("RectangleShape2D_0xm2m")
 
-[node name="Camera2D" type="Camera2D" parent="Player" unique_id=897374695]
+[node name="Camera2D" type="Camera2D" parent="Player"]
 
-[node name="PresidenciaMunicipal" type="Sprite2D" parent="." unique_id=334551551]
+[node name="PresidenciaMunicipal" type="Sprite2D" parent="."]
 position = Vector2(200, 0)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("2_0xm2m")
 script = ExtResource("3_h2yge")
 
-[node name="InteractionArea" type="Area2D" parent="PresidenciaMunicipal" unique_id=1404160297]
+[node name="InteractionArea" type="Area2D" parent="PresidenciaMunicipal"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PresidenciaMunicipal/InteractionArea" unique_id=41287809]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PresidenciaMunicipal/InteractionArea"]
 shape = SubResource("RectangleShape2D_h2yge")
 
-[node name="MercadoMunicipal" type="Sprite2D" parent="." unique_id=1704009950]
+[node name="MercadoMunicipal" type="Sprite2D" parent="."]
 position = Vector2(-200, 0)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("2_0xm2m")
+script = ExtResource("3_h2yge")
 
-[node name="ParqueCentral" type="Sprite2D" parent="." unique_id=339299223]
+[node name="InteractionArea" type="Area2D" parent="MercadoMunicipal"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MercadoMunicipal/InteractionArea"]
+shape = SubResource("RectangleShape2D_h2yge")
+
+[node name="ParqueCentral" type="Sprite2D" parent="."]
 position = Vector2(0, 200)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("2_0xm2m")
+script = ExtResource("3_h2yge")
 
-[node name="UI" type="CanvasLayer" parent="." unique_id=687540656]
+[node name="InteractionArea" type="Area2D" parent="ParqueCentral"]
 
-[node name="InteractionLabel" type="Label" parent="UI" unique_id=1313143539]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ParqueCentral/InteractionArea"]
+shape = SubResource("RectangleShape2D_h2yge")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="InteractionLabel" type="Label" parent="UI"]
 visible = false
-custom_minimum_size = Vector2(30, 30)
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 60.0
 text = "Presiona E para interactuar"
 
-[node name="GovernmentPanel" type="Panel" parent="UI" unique_id=1359971329]
+[node name="GovernmentPanel" type="Panel" parent="UI"]
 visible = false
 clip_contents = true
 offset_left = 40.0
 offset_top = 80.0
-offset_right = 800.0
-offset_bottom = 640.0
+offset_right = 820.0
+offset_bottom = 660.0
 
-[node name="GovernmentLayout" type="MarginContainer" parent="UI/GovernmentPanel" unique_id=891964547]
+[node name="GovernmentLayout" type="MarginContainer" parent="UI/GovernmentPanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -74,88 +88,122 @@ theme_override_constants/margin_top = 24
 theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 24
 
-[node name="PanelVBox" type="VBoxContainer" parent="UI/GovernmentPanel/GovernmentLayout" unique_id=1328959145]
+[node name="PanelVBox" type="VBoxContainer" parent="UI/GovernmentPanel/GovernmentLayout"]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="InfoScroll" type="ScrollContainer" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox" unique_id=436643713]
+[node name="InfoScroll" type="ScrollContainer" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox"]
 custom_minimum_size = Vector2(0, 250)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="InfoMargin" type="MarginContainer" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/InfoScroll" unique_id=1196095406]
+[node name="InfoMargin" type="MarginContainer" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/InfoScroll"]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="GovernmentInfoLabel" type="Label" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/InfoScroll/InfoMargin" unique_id=1084051515]
+[node name="GovernmentInfoLabel" type="Label" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/InfoScroll/InfoMargin"]
 custom_minimum_size = Vector2(620, 500)
 layout_mode = 2
-text = "Gobierno Municipal de San Brasa del Monte
-
-Presupuesto: $500,000
-Aprobación ciudadana: 55%
-Infraestructura: 48/100
-Seguridad: 52/100
-Actividad económica: 60/100"
+text = "Cargando..."
 autowrap_mode = 2
 
-[node name="ActionsGrid" type="GridContainer" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox" unique_id=1795421219]
+[node name="ActionsGrid" type="GridContainer" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox"]
 custom_minimum_size = Vector2(0, 130)
 layout_mode = 2
 theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 8
 columns = 3
 
-[node name="RepairRoadsButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid" unique_id=275030215]
+[node name="RepairRoadsButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
 custom_minimum_size = Vector2(190, 38)
 layout_mode = 2
-text = "Reparar calles"
+text = "Reparar calles ($50k)"
 
-[node name="SecurityButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid" unique_id=1078308248]
+[node name="SecurityButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
 custom_minimum_size = Vector2(190, 38)
 layout_mode = 2
-text = "Mejorar seguridad"
+text = "Mejorar seguridad ($40k)"
 
-[node name="BusinessSupportButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid" unique_id=1777055973]
+[node name="BusinessSupportButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
 custom_minimum_size = Vector2(190, 38)
 layout_mode = 2
-text = "Apoyar negocios"
+text = "Apoyar negocios ($30k)"
 
-[node name="EducationButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid" unique_id=165830268]
+[node name="EducationButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
 custom_minimum_size = Vector2(190, 38)
 layout_mode = 2
-text = "Mejorar educación"
+text = "Mejorar educación ($45k)"
 
-[node name="HealthButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid" unique_id=1095208211]
+[node name="HealthButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
 custom_minimum_size = Vector2(198, 38)
 layout_mode = 2
-text = "Mejorar salud"
+text = "Mejorar salud ($45k)"
 
-[node name="AdvanceDayButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid" unique_id=963340778]
+[node name="ParkMaintenanceButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
 custom_minimum_size = Vector2(198, 38)
 layout_mode = 2
-text = "Avanzar día"
+text = "Mantener parque ($22k)"
 
-[node name="ParkMaintenanceButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid" unique_id=717904577]
+[node name="AuditButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
 custom_minimum_size = Vector2(198, 38)
 layout_mode = 2
-text = "Mantener parque"
+text = "Auditoría pública ($25k)"
 
-[node name="AuditButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid" unique_id=1818188666]
+[node name="TransportButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
 custom_minimum_size = Vector2(198, 38)
 layout_mode = 2
-text = "Auditoría pública"
+text = "Mejorar transporte ($55k)"
 
-[node name="TransportButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid" unique_id=1089564531]
+[node name="LoanMinorButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
 custom_minimum_size = Vector2(198, 38)
 layout_mode = 2
-text = "Mejorar transporte"
+text = "Préstamo menor (+$100k)"
 
-[node name="ActionPreviewLabel" type="Label" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox" unique_id=746474880]
-custom_minimum_size = Vector2(0, 130)
+[node name="LoanObraButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
+custom_minimum_size = Vector2(198, 38)
+layout_mode = 2
+text = "Préstamo obra (+$250k)"
+
+[node name="AdvanceDayButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
+custom_minimum_size = Vector2(198, 38)
+layout_mode = 2
+text = "⏭ Avanzar día"
+
+[node name="ActionPreviewLabel" type="Label" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox"]
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 text = "Pasa el mouse sobre una acción para ver costo y beneficios."
 autowrap_mode = 2
+
+[node name="HUD" type="CanvasLayer" parent="."]
+layer = 10
+script = ExtResource("4_hud")
+
+[node name="HUDPanel" type="PanelContainer" parent="HUD"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = -420.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 8.0
+grow_horizontal = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD/HUDPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="HUDLabel" type="RichTextLabel" parent="HUD/HUDPanel/MarginContainer"]
+custom_minimum_size = Vector2(395, 0)
+layout_mode = 2
+fit_content = true
+bbcode_enabled = true
+text = "Cargando..."
