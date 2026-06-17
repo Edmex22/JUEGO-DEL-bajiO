@@ -4,14 +4,21 @@
 [ext_resource type="Texture2D" uid="uid://c62y4blrnh188" path="res://icon.svg" id="2_0xm2m"]
 [ext_resource type="Script" uid="uid://dfgjnw1ytd3iq" path="res://scripts/building_interaction.gd" id="3_h2yge"]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="4_hud"]
+[ext_resource type="Script" path="res://scripts/eventos.gd" id="5_eventos"]
+[ext_resource type="Script" path="res://scripts/evento_modal.gd" id="6_modal"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="7_main"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_0xm2m"]
+[sub_resource type="RectangleShape2D" id="Shape_player"]
 size = Vector2(16, 16)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_h2yge"]
+[sub_resource type="RectangleShape2D" id="Shape_interact"]
 size = Vector2(64, 64)
 
 [node name="Main" type="Node2D"]
+script = ExtResource("7_main")
+
+[node name="Eventos" type="Node" parent="."]
+script = ExtResource("5_eventos")
 
 [node name="Player" type="CharacterBody2D" parent="." groups=["player"]]
 script = ExtResource("1_ig7tw")
@@ -21,7 +28,7 @@ scale = Vector2(0.15, 0.15)
 texture = ExtResource("2_0xm2m")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-shape = SubResource("RectangleShape2D_0xm2m")
+shape = SubResource("Shape_player")
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 
@@ -34,7 +41,7 @@ script = ExtResource("3_h2yge")
 [node name="InteractionArea" type="Area2D" parent="PresidenciaMunicipal"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PresidenciaMunicipal/InteractionArea"]
-shape = SubResource("RectangleShape2D_h2yge")
+shape = SubResource("Shape_interact")
 
 [node name="MercadoMunicipal" type="Sprite2D" parent="."]
 position = Vector2(-200, 0)
@@ -45,7 +52,7 @@ script = ExtResource("3_h2yge")
 [node name="InteractionArea" type="Area2D" parent="MercadoMunicipal"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MercadoMunicipal/InteractionArea"]
-shape = SubResource("RectangleShape2D_h2yge")
+shape = SubResource("Shape_interact")
 
 [node name="ParqueCentral" type="Sprite2D" parent="."]
 position = Vector2(0, 200)
@@ -56,7 +63,40 @@ script = ExtResource("3_h2yge")
 [node name="InteractionArea" type="Area2D" parent="ParqueCentral"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ParqueCentral/InteractionArea"]
-shape = SubResource("RectangleShape2D_h2yge")
+shape = SubResource("Shape_interact")
+
+[node name="OficinasSAT" type="Sprite2D" parent="."]
+position = Vector2(400, 0)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_0xm2m")
+script = ExtResource("3_h2yge")
+
+[node name="InteractionArea" type="Area2D" parent="OficinasSAT"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OficinasSAT/InteractionArea"]
+shape = SubResource("Shape_interact")
+
+[node name="Hospital" type="Sprite2D" parent="."]
+position = Vector2(0, -200)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_0xm2m")
+script = ExtResource("3_h2yge")
+
+[node name="InteractionArea" type="Area2D" parent="Hospital"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hospital/InteractionArea"]
+shape = SubResource("Shape_interact")
+
+[node name="Banco" type="Sprite2D" parent="."]
+position = Vector2(-200, -200)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_0xm2m")
+script = ExtResource("3_h2yge")
+
+[node name="InteractionArea" type="Area2D" parent="Banco"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Banco/InteractionArea"]
+shape = SubResource("Shape_interact")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -64,7 +104,7 @@ shape = SubResource("RectangleShape2D_h2yge")
 visible = false
 offset_left = 20.0
 offset_top = 20.0
-offset_right = 400.0
+offset_right = 420.0
 offset_bottom = 60.0
 text = "Presiona E para interactuar"
 
@@ -73,8 +113,8 @@ visible = false
 clip_contents = true
 offset_left = 40.0
 offset_top = 80.0
-offset_right = 820.0
-offset_bottom = 660.0
+offset_right = 840.0
+offset_bottom = 670.0
 
 [node name="GovernmentLayout" type="MarginContainer" parent="UI/GovernmentPanel"]
 layout_mode = 1
@@ -90,93 +130,173 @@ theme_override_constants/margin_bottom = 24
 
 [node name="PanelVBox" type="VBoxContainer" parent="UI/GovernmentPanel/GovernmentLayout"]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 12
 
 [node name="InfoScroll" type="ScrollContainer" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox"]
-custom_minimum_size = Vector2(0, 250)
+custom_minimum_size = Vector2(0, 230)
 layout_mode = 2
 size_flags_vertical = 3
 
 [node name="InfoMargin" type="MarginContainer" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/InfoScroll"]
 layout_mode = 2
 theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
+theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
+theme_override_constants/margin_bottom = 12
 
 [node name="GovernmentInfoLabel" type="Label" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/InfoScroll/InfoMargin"]
-custom_minimum_size = Vector2(620, 500)
+custom_minimum_size = Vector2(620, 400)
 layout_mode = 2
 text = "Cargando..."
 autowrap_mode = 2
 
 [node name="ActionsGrid" type="GridContainer" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox"]
-custom_minimum_size = Vector2(0, 130)
 layout_mode = 2
-theme_override_constants/h_separation = 10
-theme_override_constants/v_separation = 8
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 6
 columns = 3
 
 [node name="RepairRoadsButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
-custom_minimum_size = Vector2(190, 38)
+custom_minimum_size = Vector2(185, 36)
 layout_mode = 2
 text = "Reparar calles ($50k)"
 
 [node name="SecurityButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
-custom_minimum_size = Vector2(190, 38)
+custom_minimum_size = Vector2(185, 36)
 layout_mode = 2
 text = "Mejorar seguridad ($40k)"
 
 [node name="BusinessSupportButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
-custom_minimum_size = Vector2(190, 38)
+custom_minimum_size = Vector2(185, 36)
 layout_mode = 2
 text = "Apoyar negocios ($30k)"
 
 [node name="EducationButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
-custom_minimum_size = Vector2(190, 38)
+custom_minimum_size = Vector2(185, 36)
 layout_mode = 2
 text = "Mejorar educación ($45k)"
 
 [node name="HealthButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
-custom_minimum_size = Vector2(198, 38)
+custom_minimum_size = Vector2(185, 36)
 layout_mode = 2
 text = "Mejorar salud ($45k)"
 
 [node name="ParkMaintenanceButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
-custom_minimum_size = Vector2(198, 38)
+custom_minimum_size = Vector2(185, 36)
 layout_mode = 2
 text = "Mantener parque ($22k)"
 
 [node name="AuditButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
-custom_minimum_size = Vector2(198, 38)
+custom_minimum_size = Vector2(185, 36)
 layout_mode = 2
 text = "Auditoría pública ($25k)"
 
 [node name="TransportButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
-custom_minimum_size = Vector2(198, 38)
+custom_minimum_size = Vector2(185, 36)
 layout_mode = 2
 text = "Mejorar transporte ($55k)"
 
 [node name="LoanMinorButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
-custom_minimum_size = Vector2(198, 38)
+custom_minimum_size = Vector2(185, 36)
 layout_mode = 2
 text = "Préstamo menor (+$100k)"
 
 [node name="LoanObraButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
-custom_minimum_size = Vector2(198, 38)
+custom_minimum_size = Vector2(185, 36)
 layout_mode = 2
 text = "Préstamo obra (+$250k)"
 
-[node name="AdvanceDayButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
-custom_minimum_size = Vector2(198, 38)
+[node name="SatFiscalizacionButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
+visible = false
+custom_minimum_size = Vector2(185, 36)
 layout_mode = 2
-text = "⏭ Avanzar día"
+text = "Fiscalización intensiva"
+
+[node name="SatTramitesButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
+visible = false
+custom_minimum_size = Vector2(185, 36)
+layout_mode = 2
+text = "Simplificar trámites ($15k)"
+
+[node name="SatAmnistiaButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
+visible = false
+custom_minimum_size = Vector2(185, 36)
+layout_mode = 2
+text = "Amnistía fiscal ($10k)"
+
+[node name="HospMedicosButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
+visible = false
+custom_minimum_size = Vector2(185, 36)
+layout_mode = 2
+text = "Contratar médicos ($60k)"
+
+[node name="HospMedicamentosButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
+visible = false
+custom_minimum_size = Vector2(185, 36)
+layout_mode = 2
+text = "Medicamentos ($25k)"
+
+[node name="HospCampanaButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
+visible = false
+custom_minimum_size = Vector2(185, 36)
+layout_mode = 2
+text = "Campaña de salud ($18k)"
+
+[node name="AdvanceDayButton" type="Button" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox/ActionsGrid"]
+custom_minimum_size = Vector2(185, 36)
+layout_mode = 2
+text = "⏭  Avanzar día"
 
 [node name="ActionPreviewLabel" type="Label" parent="UI/GovernmentPanel/GovernmentLayout/PanelVBox"]
-custom_minimum_size = Vector2(0, 80)
+custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 text = "Pasa el mouse sobre una acción para ver costo y beneficios."
 autowrap_mode = 2
+
+[node name="EventoModal" type="Panel" parent="UI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -200.0
+offset_right = 280.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("6_modal")
+process_mode = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/EventoModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="UI/EventoModal/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Titulo" type="Label" parent="UI/EventoModal/MarginContainer/VBox"]
+layout_mode = 2
+text = "Evento"
+theme_override_font_sizes/font_size = 20
+
+[node name="Descripcion" type="Label" parent="UI/EventoModal/MarginContainer/VBox"]
+layout_mode = 2
+text = "Descripción del evento."
+autowrap_mode = 2
+custom_minimum_size = Vector2(500, 0)
+
+[node name="Botones" type="VBoxContainer" parent="UI/EventoModal/MarginContainer/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
 
 [node name="HUD" type="CanvasLayer" parent="."]
 layer = 10

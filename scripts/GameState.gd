@@ -1,5 +1,7 @@
 extends Node
 
+signal dia_avanzado(dia: int)
+
 var municipio_nombre: String = "San Brasa del Monte"
 var dia_actual: int = 1
 
@@ -122,7 +124,55 @@ func solicitar_rescate_urgente() -> void:
 	deuda_municipal += 700000
 	aprobacion_ciudadana -= 7
 	_limitar_valores()
-	print("Se solicitó un rescate urgente.")
+
+# ── SAT ───────────────────────────────────────────────────────────────────────
+func sat_fiscalizacion() -> void:
+	if presupuesto_municipal >= 20000:
+		presupuesto_municipal -= 20000
+		presupuesto_municipal += 45000  # recaudación extra
+		corrupcion -= 4
+		actividad_economica -= 2
+		_limitar_valores()
+
+func sat_simplificar_tramites() -> void:
+	if presupuesto_municipal >= 15000:
+		presupuesto_municipal -= 15000
+		actividad_economica += 5
+		empleo += 2
+		aprobacion_ciudadana += 2
+		_limitar_valores()
+
+func sat_amnistia_fiscal() -> void:
+	if presupuesto_municipal >= 10000:
+		presupuesto_municipal -= 10000
+		presupuesto_municipal += 80000  # contribuyentes se ponen al corriente
+		aprobacion_ciudadana += 3
+		corrupcion += 2
+		_limitar_valores()
+
+# ── Hospital ──────────────────────────────────────────────────────────────────
+func hospital_contratar_medicos() -> void:
+	if presupuesto_municipal >= 60000:
+		presupuesto_municipal -= 60000
+		salud += 12
+		empleo += 3
+		aprobacion_ciudadana += 4
+		_limitar_valores()
+
+func hospital_comprar_medicamentos() -> void:
+	if presupuesto_municipal >= 25000:
+		presupuesto_municipal -= 25000
+		salud += 6
+		aprobacion_ciudadana += 2
+		_limitar_valores()
+
+func hospital_campana_salud() -> void:
+	if presupuesto_municipal >= 18000:
+		presupuesto_municipal -= 18000
+		salud += 5
+		tejido_social += 3
+		aprobacion_ciudadana += 3
+		_limitar_valores()
 
 func avanzar_dia() -> void:
 	dia_actual += 1
@@ -150,8 +200,7 @@ func avanzar_dia() -> void:
 
 	_recalcular_aprobacion()
 	_limitar_valores()
-
-	print("Día avanzado a: " + str(dia_actual))
+	emit_signal("dia_avanzado", dia_actual)
 
 func calcular_ingreso_diario() -> int:
 	var ingreso := 5500
@@ -167,27 +216,19 @@ func calcular_gasto_operativo_diario() -> int:
 	return gasto
 
 func _aplicar_evento_semanal() -> void:
-	var evento := randi_range(1, 6)
-
-	match evento:
-		1:
-			actividad_economica -= 2
-			print("Evento semanal: semana floja para el comercio.")
-		2:
-			presupuesto_municipal += 16000
-			print("Evento semanal: apoyo estatal extraordinario recibido.")
-		3:
-			corrupcion += 2
-			print("Evento semanal: rumores políticos aumentan presión pública.")
-		4:
-			empleo -= 3
-			print("Evento semanal: talleres reportan baja temporal de empleo.")
-		5:
-			transporte -= 2
-			print("Evento semanal: quejas por retrasos de transporte.")
-		6:
-			tejido_social += 2
-			print("Evento semanal: actividad comunitaria mejora el ánimo social.")
+	# Los eventos con opciones se disparan desde Eventos (autoload)
+	# Este método solo lanza la señal; Eventos.gd la recibe y muestra el modal
+	var idx := randi_range(0, 5)
+	var eventos_node = get_node_or_null("/root/Eventos")
+	if eventos_node == null:
+		return
+	match idx:
+		0: eventos_node.evento_semana_floja()
+		1: eventos_node.evento_apoyo_estatal()
+		2: eventos_node.evento_rumores_corrupcion()
+		3: eventos_node.evento_baja_empleo()
+		4: eventos_node.evento_quejas_transporte()
+		5: eventos_node.evento_actividad_comunitaria()
 
 func _recalcular_aprobacion() -> void:
 	var promedio_servicios := int(
