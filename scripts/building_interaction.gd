@@ -186,94 +186,102 @@ func _on_body_exited(body: Node2D) -> void:
 		if government_panel:  government_panel.visible  = false
 
 
-# ── Sprite pixel-art dibujado en código ───────────────────────────────────────
+# ── Sprite isométrico dibujado en código ──────────────────────────────────────
+# Cada edificio se dibuja como un bloque isométrico:
+# base (rombo en el suelo) + cara izquierda + cara derecha + techo
+
 func _draw() -> void:
+	z_index = int(global_position.y)
 	match tipo:
-		TipoEdificio.PRESIDENCIA: _draw_presidencia()
-		TipoEdificio.MERCADO:     _draw_mercado()
-		TipoEdificio.PARQUE:      _draw_parque()
-		TipoEdificio.SAT:         _draw_sat()
-		TipoEdificio.HOSPITAL:    _draw_hospital()
-		TipoEdificio.BANCO:       _draw_banco()
-	# Nombre del edificio debajo
+		TipoEdificio.PRESIDENCIA: _draw_iso_presidencia()
+		TipoEdificio.MERCADO:     _draw_iso_mercado()
+		TipoEdificio.PARQUE:      _draw_iso_parque()
+		TipoEdificio.SAT:         _draw_iso_sat()
+		TipoEdificio.HOSPITAL:    _draw_iso_hospital()
+		TipoEdificio.BANCO:       _draw_iso_banco()
 	var font := ThemeDB.fallback_font
-	draw_string(font, Vector2(-40, 54), nombre_edificio,
-		HORIZONTAL_ALIGNMENT_LEFT, 80, 10, Color("#F5F0E8"))
+	draw_string(font, Vector2(-36, 28), nombre_edificio,
+		HORIZONTAL_ALIGNMENT_LEFT, 72, 9, Color("#F5F0E8"))
 
 
-func _r(x:float,y:float,w:float,h:float,c:String) -> void:
-	draw_rect(Rect2(x, y, w, h), Color(c))
+# Dibuja un bloque isométrico genérico dado colores de techo, cara izq y cara der
+# h = altura del bloque en píxeles de pantalla
+func _bloque_iso(h: float, c_techo: String, c_izq: String, c_der: String) -> void:
+	var hw := 32.0  # mitad del ancho del tile (TILE_W/2)
+	var hh := 16.0  # mitad del alto del tile  (TILE_H/2)
+
+	# Techo (rombo superior)
+	var techo := PackedVector2Array([
+		Vector2(0,   -h - hh),
+		Vector2(hw,  -h),
+		Vector2(0,   -h + hh),
+		Vector2(-hw, -h),
+	])
+	# Cara izquierda
+	var izq := PackedVector2Array([
+		Vector2(-hw, -h),
+		Vector2(0,   -h + hh),
+		Vector2(0,   hh),
+		Vector2(-hw, 0),
+	])
+	# Cara derecha
+	var der := PackedVector2Array([
+		Vector2(0,   -h + hh),
+		Vector2(hw,  -h),
+		Vector2(hw,  0),
+		Vector2(0,   hh),
+	])
+	draw_colored_polygon(izq,   PackedColorArray([Color(c_izq)]*4))
+	draw_colored_polygon(der,   PackedColorArray([Color(c_der)]*4))
+	draw_colored_polygon(techo, PackedColorArray([Color(c_techo)]*4))
 
 
-func _draw_presidencia() -> void:
-	_r(-44,-40, 88, 80, "#C0392B")   # cuerpo
-	_r(-48,-44, 96,  8, "#8B2020")   # techo
-	_r(-36,-30, 12, 30, "#8B2020")   # columna izq
-	_r( 24,-30, 12, 30, "#8B2020")   # columna der
-	_r( -8,-30, 16, 20, "#1A1A1A")   # puerta
-	_r(-28,-24, 12, 12, "#F39C12")   # ventana izq
-	_r( 16,-24, 12, 12, "#F39C12")   # ventana der
-	_r(-20,-52, 40,14, "#E74C3C")    # bandera
-	_r(-20,-52,  6, 6, "#2ECC71")
+func _draw_iso_presidencia() -> void:
+	_bloque_iso(40.0, "#C0392B", "#8B2020", "#A93226")
+	# Bandera
+	draw_line(Vector2(0, -40), Vector2(0, -58), Color("#F5F0E8"), 1.5)
+	draw_rect(Rect2(0, -58, 10, 6), Color("#2ECC71"))
 
 
-func _draw_mercado() -> void:
-	_r(-40,-30, 80, 60, "#E67E22")   # cuerpo naranja
-	_r(-44,-36, 88, 10, "#C0392B")   # toldo rojo
-	_r(-36,-36, 12, 10, "#E74C3C")   # franja toldo
-	_r(  0,-36, 12, 10, "#E74C3C")
-	_r(-28,-20, 20, 28, "#1A1A1A")   # puerta
-	_r( 10,-20, 20, 16, "#F5F0E8")   # vitrina
-	_r(-44, 24, 88,  6, "#8B4513")   # base
+func _draw_iso_mercado() -> void:
+	_bloque_iso(32.0, "#E67E22", "#CA6F1E", "#D68910")
+	# Toldo
+	var toldo := PackedVector2Array([
+		Vector2(0, -32-16), Vector2(32, -32), Vector2(0, -32+16), Vector2(-32, -32)
+	])
+	draw_colored_polygon(toldo, PackedColorArray([Color("#C0392B")]*4))
 
 
-func _draw_parque() -> void:
-	_r(-44,-10, 88, 40, "#27AE60")   # pasto
+func _draw_iso_parque() -> void:
+	# Base verde (más baja)
+	_bloque_iso(8.0, "#27AE60", "#1E8449", "#229954")
 	# Árbol izquierdo
-	_r(-30,-40, 18, 30, "#1E8449")
-	_r(-24,-50, 10, 14, "#27AE60")
-	_r(-26,-10,  6, 28, "#8B4513")
+	draw_circle(Vector2(-16, -20), 10.0, Color("#1E8449"))
+	draw_line(Vector2(-16, -10), Vector2(-16, -4), Color("#8B4513"), 2.0)
 	# Árbol derecho
-	_r( 12,-40, 18, 30, "#1E8449")
-	_r( 16,-50, 10, 14, "#27AE60")
-	_r( 20,-10,  6, 28, "#8B4513")
-	# Banca
-	_r( -8, 10, 16,  4, "#F5F0E8")
-	_r( -8, 14,  4,  8, "#888888")
-	_r( 10, 14,  4,  8, "#888888")
+	draw_circle(Vector2(16, -20), 10.0, Color("#27AE60"))
+	draw_line(Vector2(16, -10), Vector2(16, -4), Color("#8B4513"), 2.0)
 
 
-func _draw_sat() -> void:
-	_r(-40,-36, 80, 72, "#2C2C2C")   # cuerpo gris oscuro
-	_r(-44,-40, 88,  8, "#1A1A1A")   # techo
-	_r(-36,-28, 72,  6, "#E74C3C")   # franja roja
-	_r(-10,-30,  20,36, "#1A1A1A")   # puerta
-	_r(-32,-18, 16, 14, "#3498DB")   # ventana izq
-	_r( 16,-18, 16, 14, "#3498DB")   # ventana der
-	# Letrero SAT
-	_r(-20,-40, 40, 10, "#E74C3C")
+func _draw_iso_sat() -> void:
+	_bloque_iso(36.0, "#2C2C2C", "#1A1A1A", "#242424")
+	# Franja roja en cara izquierda
+	var franja := PackedVector2Array([
+		Vector2(-32, -12), Vector2(0, -12+16), Vector2(0, -8+16), Vector2(-32, -8)
+	])
+	draw_colored_polygon(franja, PackedColorArray([Color("#E74C3C")]*4))
 	var font := ThemeDB.fallback_font
-	draw_string(font, Vector2(-14,-33), "SAT", HORIZONTAL_ALIGNMENT_LEFT, 40, 9, Color("#F5F0E8"))
+	draw_string(font, Vector2(-14, -38), "SAT", HORIZONTAL_ALIGNMENT_LEFT, 36, 8, Color("#E74C3C"))
 
 
-func _draw_hospital() -> void:
-	_r(-40,-36, 80, 72, "#F5F0E8")   # cuerpo blanco hueso
-	_r(-44,-40, 88,  8, "#2ECC71")   # techo verde
-	_r(-10,-30, 20, 36, "#1A1A1A")   # puerta
-	_r(-30,-20, 18, 14, "#3498DB")   # ventana izq
-	_r( 12,-20, 18, 14, "#3498DB")   # ventana der
-	# Cruz roja
-	_r( -5,-38, 10, 28, "#E74C3C")
-	_r(-14,-27, 28, 10, "#E74C3C")
+func _draw_iso_hospital() -> void:
+	_bloque_iso(36.0, "#ECF0F1", "#BDC3C7", "#D5D8DC")
+	# Cruz roja en techo
+	draw_rect(Rect2(-3, -36-16-4, 6, 18), Color("#E74C3C"))
+	draw_rect(Rect2(-9, -36-16+3, 18, 6), Color("#E74C3C"))
 
 
-func _draw_banco() -> void:
-	_r(-40,-36, 80, 72, "#3498DB")   # cuerpo azul
-	_r(-44,-40, 88, 10, "#1A4F7A")   # techo
-	# Columnas
-	for i in range(3):
-		_r(-32 + i*22, -30, 10, 50, "#1A4F7A")
-	_r(-10,-28, 20, 34, "#1A1A1A")   # puerta
-	# Símbolo $
+func _draw_iso_banco() -> void:
+	_bloque_iso(38.0, "#3498DB", "#1A5276", "#2471A3")
 	var font := ThemeDB.fallback_font
-	draw_string(font, Vector2(-10,-42), "$", HORIZONTAL_ALIGNMENT_LEFT, 24, 22, Color("#F39C12"))
+	draw_string(font, Vector2(-8, -42), "$", HORIZONTAL_ALIGNMENT_LEFT, 20, 18, Color("#F39C12"))

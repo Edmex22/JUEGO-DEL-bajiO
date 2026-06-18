@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GameState="*uid://bl22igromvpja"
 Guardado="*res://scripts/guardado.gd"
+GridIso="*res://scripts/grid_iso.gd"
 
 [input]
 

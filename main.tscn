@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scripts/eventos.gd" id="5_eventos"]
 [ext_resource type="Script" path="res://scripts/evento_modal.gd" id="6_modal"]
 [ext_resource type="Script" path="res://scripts/main.gd" id="7_main"]
+[ext_resource type="Script" path="res://scripts/mapa.gd" id="8_mapa"]
 
 [sub_resource type="RectangleShape2D" id="Shape_player"]
 size = Vector2(16, 16)
@@ -15,12 +16,17 @@ size = Vector2(16, 16)
 size = Vector2(64, 64)
 
 [node name="Main" type="Node2D"]
+y_sort_enabled = true
 script = ExtResource("7_main")
+
+[node name="Mapa" type="Node2D" parent="."]
+script = ExtResource("8_mapa")
 
 [node name="Eventos" type="Node" parent="."]
 script = ExtResource("5_eventos")
 
 [node name="Player" type="CharacterBody2D" parent="." groups=["player"]]
+position = Vector2(0, 288)
 script = ExtResource("1_ig7tw")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
@@ -31,9 +37,10 @@ texture = ExtResource("2_0xm2m")
 shape = SubResource("Shape_player")
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(1.5, 1.5)
 
 [node name="PresidenciaMunicipal" type="Node2D" parent="."]
-position = Vector2(200, 0)
+position = Vector2(0, 128)
 script = ExtResource("3_h2yge")
 
 [node name="InteractionArea" type="Area2D" parent="PresidenciaMunicipal"]
@@ -42,7 +49,7 @@ script = ExtResource("3_h2yge")
 shape = SubResource("Shape_interact")
 
 [node name="MercadoMunicipal" type="Node2D" parent="."]
-position = Vector2(-200, 0)
+position = Vector2(-192, 224)
 script = ExtResource("3_h2yge")
 
 [node name="InteractionArea" type="Area2D" parent="MercadoMunicipal"]
@@ -51,7 +58,7 @@ script = ExtResource("3_h2yge")
 shape = SubResource("Shape_interact")
 
 [node name="ParqueCentral" type="Node2D" parent="."]
-position = Vector2(0, 200)
+position = Vector2(192, 224)
 script = ExtResource("3_h2yge")
 
 [node name="InteractionArea" type="Area2D" parent="ParqueCentral"]
@@ -60,7 +67,7 @@ script = ExtResource("3_h2yge")
 shape = SubResource("Shape_interact")
 
 [node name="OficinasSAT" type="Node2D" parent="."]
-position = Vector2(400, 0)
+position = Vector2(-320, 96)
 script = ExtResource("3_h2yge")
 
 [node name="InteractionArea" type="Area2D" parent="OficinasSAT"]
@@ -69,7 +76,7 @@ script = ExtResource("3_h2yge")
 shape = SubResource("Shape_interact")
 
 [node name="Hospital" type="Node2D" parent="."]
-position = Vector2(0, -200)
+position = Vector2(320, 96)
 script = ExtResource("3_h2yge")
 
 [node name="InteractionArea" type="Area2D" parent="Hospital"]
@@ -78,7 +85,7 @@ script = ExtResource("3_h2yge")
 shape = SubResource("Shape_interact")
 
 [node name="Banco" type="Node2D" parent="."]
-position = Vector2(-200, -200)
+position = Vector2(0, 32)
 script = ExtResource("3_h2yge")
 
 [node name="InteractionArea" type="Area2D" parent="Banco"]
