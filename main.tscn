@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/main.gd" id="7_main"]
 [ext_resource type="Script" path="res://scripts/mapa.gd" id="8_mapa"]
 [ext_resource type="Script" path="res://scripts/player_sprite.gd" id="9_psprite"]
+[ext_resource type="Script" path="res://scripts/ciclo_dia_noche.gd" id="10_ciclo"]
 
 [sub_resource type="RectangleShape2D" id="Shape_player"]
 size = Vector2(16, 16)
@@ -292,6 +293,19 @@ custom_minimum_size = Vector2(500, 0)
 [node name="Botones" type="VBoxContainer" parent="UI/EventoModal/MarginContainer/VBox"]
 layout_mode = 2
 theme_override_constants/separation = 8
+
+[node name="CicloDiaNoche" type="CanvasLayer" parent="."]
+layer = 9
+script = ExtResource("10_ciclo")
+
+[node name="Overlay" type="ColorRect" parent="CicloDiaNoche"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 1)
+mouse_filter = 2
 
 [node name="HUD" type="CanvasLayer" parent="."]
 layer = 10
