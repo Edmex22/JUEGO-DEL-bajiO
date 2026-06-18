@@ -1,0 +1,85 @@
+[gd_scene format=3 uid="uid://presidencia_juntas"]
+
+[ext_resource type="Script" path="res://scripts/presidencia_sala_juntas.gd" id="1_jnt"]
+[ext_resource type="Script" path="res://scripts/player.gd.gd" id="2_player"]
+[ext_resource type="Script" path="res://scripts/player_sprite.gd" id="3_psprite"]
+[ext_resource type="Script" path="res://scripts/npc.gd" id="4_npc"]
+[ext_resource type="Script" path="res://scripts/puerta.gd" id="5_puerta"]
+[ext_resource type="Script" path="res://scripts/camara.gd" id="6_camara"]
+
+[sub_resource type="RectangleShape2D" id="Shape_player"]
+size = Vector2(14, 14)
+
+[sub_resource type="RectangleShape2D" id="Shape_salida"]
+size = Vector2(56, 28)
+
+[node name="PresidenciaJuntas" type="Node2D"]
+script = ExtResource("1_jnt")
+escena_destino = "res://scenes/presidencia/recepcion.tscn"
+posicion_llegada = Vector2(568, 300)
+ancho = 640
+alto = 480
+
+[node name="Fondo" type="Node2D" parent="."]
+
+[node name="Player" type="CharacterBody2D" parent="." groups=["player"]]
+position = Vector2(80, 420)
+script = ExtResource("2_player")
+
+[node name="PlayerSprite" type="Node2D" parent="Player"]
+script = ExtResource("3_psprite")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("Shape_player")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(2.0, 2.0)
+script = ExtResource("6_camara")
+
+[node name="ZonaSalida" type="Area2D" parent="."]
+position = Vector2(320, 450)
+script = ExtResource("5_puerta")
+escena_destino = "res://scenes/presidencia/recepcion.tscn"
+posicion_llegada = Vector2(568, 300)
+etiqueta = "E — Regresar a Recepción"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ZonaSalida"]
+shape = SubResource("Shape_salida")
+
+[node name="DirectorObrasPublicas" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(200, 220)
+script = ExtResource("4_npc")
+nombre_npc = "Ing. Fernando Soto"
+rol = "Director de Obras Públicas"
+dialogos = [
+	"Estamos revisando el presupuesto para el nuevo drenaje.",
+	"Las calles de la colonia norte llevan 3 años sin mantenimiento.",
+	"Con $50,000 podríamos reparar los baches de 4 colonias.",
+	"El reglamento de construcción necesita una actualización urgente."
+]
+dialogos_bajo_presupuesto = [
+	"Sin presupuesto no podemos avanzar en las obras, es una pena.",
+	"Vamos a tener que posponer las obras del parque industrial."
+]
+
+[node name="DirectorEducacion" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(420, 220)
+script = ExtResource("4_npc")
+nombre_npc = "Profra. Ana Torres"
+rol = "Directora de Educación"
+dialogos = [
+	"Necesitamos más aulas en la escuela primaria Juárez.",
+	"La deserción escolar bajó un 8% este año, ¡buenas noticias!",
+	"Los programas de becas municipales hacen mucha diferencia.",
+	"¿Ya revisó el presupuesto para útiles escolares del próximo ciclo?"
+]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="LabelSalida" type="Label" parent="UI"]
+visible = false
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 50.0
+text = "E — Regresar a Recepción"

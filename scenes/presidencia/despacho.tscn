@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://presidencia_despacho"]
+
+[ext_resource type="Script" path="res://scripts/presidencia_despacho.gd" id="1_des"]
+[ext_resource type="Script" path="res://scripts/player.gd.gd" id="2_player"]
+[ext_resource type="Script" path="res://scripts/player_sprite.gd" id="3_psprite"]
+[ext_resource type="Script" path="res://scripts/npc.gd" id="4_npc"]
+[ext_resource type="Script" path="res://scripts/puerta.gd" id="5_puerta"]
+[ext_resource type="Script" path="res://scripts/camara.gd" id="6_camara"]
+
+[sub_resource type="RectangleShape2D" id="Shape_player"]
+size = Vector2(14, 14)
+
+[sub_resource type="RectangleShape2D" id="Shape_salida"]
+size = Vector2(56, 28)
+
+[node name="PresidenciaDespacho" type="Node2D"]
+script = ExtResource("1_des")
+escena_destino = "res://scenes/presidencia/recepcion.tscn"
+posicion_llegada = Vector2(320, 160)
+ancho = 640
+alto = 480
+
+[node name="Fondo" type="Node2D" parent="."]
+
+[node name="Player" type="CharacterBody2D" parent="." groups=["player"]]
+position = Vector2(320, 420)
+script = ExtResource("2_player")
+
+[node name="PlayerSprite" type="Node2D" parent="Player"]
+script = ExtResource("3_psprite")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("Shape_player")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(2.0, 2.0)
+script = ExtResource("6_camara")
+
+[node name="ZonaSalida" type="Area2D" parent="."]
+position = Vector2(320, 450)
+script = ExtResource("5_puerta")
+escena_destino = "res://scenes/presidencia/recepcion.tscn"
+posicion_llegada = Vector2(320, 160)
+etiqueta = "E — Regresar a Recepción"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ZonaSalida"]
+shape = SubResource("Shape_salida")
+
+[node name="PresidenteMunicipal" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(320, 290)
+script = ExtResource("4_npc")
+nombre_npc = "Lic. Roberto Garza"
+rol = "Presidente Municipal"
+dialogos = [
+	"Bienvenido. Siéntese, por favor.",
+	"Estamos trabajando en mejorar la infraestructura del municipio.",
+	"La transparencia y rendición de cuentas son nuestras prioridades.",
+	"Si necesita gestionar el presupuesto, puede hacerlo desde aquí.",
+	"Recuerde que cada peso del erario debe usarse con responsabilidad."
+]
+dialogos_bajo_presupuesto = [
+	"Estamos en una situación financiera difícil este período.",
+	"Vamos a necesitar revisar qué proyectos se pueden diferir.",
+	"En crisis, la prioridad es mantener los servicios básicos."
+]
+
+[node name="AsesorFinanciero" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(180, 350)
+script = ExtResource("4_npc")
+nombre_npc = "C.P. Elena Ruiz"
+rol = "Asesora Financiera"
+dialogos = [
+	"Los ingresos por impuesto predial son nuestra principal fuente.",
+	"Le recomiendo revisar el ISR de los negocios locales.",
+	"Un municipio sano no debe tener deuda mayor al 30% del presupuesto.",
+	"El SAT puede ayudarnos a fiscalizar a contribuyentes omisos."
+]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="LabelSalida" type="Label" parent="UI"]
+visible = false
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 50.0
+text = "E — Regresar a Recepción"

@@ -49,7 +49,7 @@ script = ExtResource("3_h2yge")
 tipo = 0
 nombre_edificio = "Presidencia Municipal"
 sprite_dia = ExtResource("11_pres")
-escena_interior = "res://scenes/presidencia_interior.tscn"
+escena_interior = "res://scenes/presidencia/recepcion.tscn"
 
 [node name="InteractionArea" type="Area2D" parent="PresidenciaMunicipal"]
 

@@ -1,0 +1,109 @@
+[gd_scene format=3 uid="uid://presidencia_recepcion"]
+
+[ext_resource type="Script" path="res://scripts/presidencia_recepcion.gd" id="1_rec"]
+[ext_resource type="Script" path="res://scripts/player.gd.gd" id="2_player"]
+[ext_resource type="Script" path="res://scripts/player_sprite.gd" id="3_psprite"]
+[ext_resource type="Script" path="res://scripts/npc.gd" id="4_npc"]
+[ext_resource type="Script" path="res://scripts/puerta.gd" id="5_puerta"]
+[ext_resource type="Script" path="res://scripts/camara.gd" id="6_camara"]
+
+[sub_resource type="RectangleShape2D" id="Shape_player"]
+size = Vector2(14, 14)
+
+[sub_resource type="RectangleShape2D" id="Shape_salida"]
+size = Vector2(72, 28)
+
+[sub_resource type="RectangleShape2D" id="Shape_despacho"]
+size = Vector2(56, 28)
+
+[sub_resource type="RectangleShape2D" id="Shape_juntas"]
+size = Vector2(56, 28)
+
+[node name="PresidenciaRecepcion" type="Node2D"]
+script = ExtResource("1_rec")
+escena_destino = "res://main.tscn"
+posicion_llegada = Vector2(0, 200)
+ancho = 640
+alto = 480
+
+[node name="Fondo" type="Node2D" parent="."]
+
+[node name="Player" type="CharacterBody2D" parent="." groups=["player"]]
+position = Vector2(320, 400)
+script = ExtResource("2_player")
+
+[node name="PlayerSprite" type="Node2D" parent="Player"]
+script = ExtResource("3_psprite")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("Shape_player")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(2.0, 2.0)
+script = ExtResource("6_camara")
+
+[node name="ZonaSalida" type="Area2D" parent="."]
+position = Vector2(320, 458)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ZonaSalida"]
+shape = SubResource("Shape_salida")
+
+[node name="PuertaDespacho" type="Area2D" parent="."]
+position = Vector2(320, 112)
+script = ExtResource("5_puerta")
+escena_destino = "res://scenes/presidencia/despacho.tscn"
+posicion_llegada = Vector2(320, 420)
+etiqueta = "E — Entrar al Despacho"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PuertaDespacho"]
+shape = SubResource("Shape_despacho")
+
+[node name="PuertaJuntas" type="Area2D" parent="."]
+position = Vector2(568, 236)
+script = ExtResource("5_puerta")
+escena_destino = "res://scenes/presidencia/sala_juntas.tscn"
+posicion_llegada = Vector2(80, 420)
+etiqueta = "E — Sala de Juntas"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PuertaJuntas"]
+shape = SubResource("Shape_juntas")
+
+[node name="MargaritaLopez" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(320, 192)
+script = ExtResource("4_npc")
+nombre_npc = "Margarita López"
+rol = "Secretaria"
+dialogos = ["Buenos días. ¿En qué le puedo ayudar?", "El Presidente le puede atender en el Despacho.", "Necesita cita previa para trámites oficiales."]
+dialogos_bajo_presupuesto = ["Ahorita hay recorte de personal... estamos muy ocupados.", "Con el presupuesto bajo, muchos trámites están retrasados."]
+
+[node name="CarlosMendoza" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(80, 270)
+script = ExtResource("4_npc")
+nombre_npc = "Carlos Mendoza"
+rol = "Ciudadano"
+dialogos = ["Llevo dos horas esperando para hablar con alguien.", "Vine a preguntar sobre el permiso de mi negocio.", "¿Cuándo van a arreglar el bache de la calle 5?"]
+dialogos_noche = ["Ya casi cierran las oficinas y todavía no me atienden..."]
+
+[node name="RosaHernandez" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(80, 330)
+script = ExtResource("4_npc")
+nombre_npc = "Rosa Hernández"
+rol = "Ciudadana"
+dialogos = ["Vine a pagar una multa del predial.", "Dicen que ahora se puede pagar en línea, pero yo prefiero en persona.", "Ojalá pusieran más ventanillas, la fila está larga."]
+
+[node name="GuardiaVillareal" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(560, 400)
+script = ExtResource("4_npc")
+nombre_npc = "Oficial Villarreal"
+rol = "Seguridad"
+dialogos = ["El acceso al Despacho es solo con cita.", "Por favor no corra dentro del edificio.", "Las oficinas cierran a las 3 de la tarde."]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="LabelSalida" type="Label" parent="UI"]
+visible = false
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 50.0
+text = "E — Salir del edificio"
