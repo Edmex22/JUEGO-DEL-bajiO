@@ -47,10 +47,10 @@ func _dibujar_fondo() -> void:
 
 	# Librero lateral
 	_rect(Vector2(30, 80), Vector2(80, 200), Color("#3A1A05"))
+	var colores_libros: Array[Color] = [Color("#8A2020"), Color("#2020AA"), Color("#206A20"), Color("#AA8820"), Color("#602060")]
 	for ry in range(0, 5):
 		for rx in range(0, 3):
-			var c := [Color("#8A2020"), Color("#2020AA"), Color("#206A20"),
-					  Color("#AA8820"), Color("#602060")].pick_random()
+			var c: Color = colores_libros[(ry * 3 + rx) % colores_libros.size()]
 			_rect(Vector2(34 + rx * 24, 88 + ry * 36), Vector2(20, 32), c)
 
 	# Cuadro del presidente (retrato)
