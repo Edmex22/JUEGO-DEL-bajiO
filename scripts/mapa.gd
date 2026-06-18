@@ -36,7 +36,7 @@ func _draw() -> void:
 
 func _dibujar_tile(centro: Vector2, relleno: Color, borde: Color) -> void:
 	var verts := GridIso.vertices_rombo(centro)
-	draw_colored_polygon(verts, PackedColorArray([relleno, relleno, relleno, relleno]))
+	draw_colored_polygon(verts, relleno)
 	# Borde
 	draw_line(verts[0], verts[1], borde, 1.0)
 	draw_line(verts[1], verts[2], borde, 1.0)
