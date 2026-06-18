@@ -140,6 +140,8 @@ func _process(_delta: float) -> void:
 
 
 func _entrar_edificio() -> void:
+	# Resetear posición para que el interior use su spawn por defecto (no la del mapa exterior)
+	GameState.posicion_jugador_exterior = Vector2.ZERO
 	# Vibrar cámara antes del fade
 	var jugador := get_tree().get_first_node_in_group("player")
 	if jugador:
