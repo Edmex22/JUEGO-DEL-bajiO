@@ -1,39 +1,38 @@
 extends CanvasLayer
 
-# Cubre toda la pantalla con un ColorRect que aplica el shader día/noche
-# El ciclo completo es de 365 días de juego = 1 año
+const DURACION_TRANSICION := 2.0
 
-const DIAS_POR_CICLO := 365.0
-const DURACION_TRANSICION := 2.0  # segundos de transición suave
+# Colores del overlay (fondo semitransparente que tinta la escena)
+const COLOR_DIA       := Color(0.0, 0.0, 0.0, 0.0)       # transparente
+const COLOR_ATARDECER := Color(0.6, 0.2, 0.0, 0.35)       # naranja oscuro
+const COLOR_NOCHE     := Color(0.05, 0.08, 0.25, 0.72)    # azul noche
+const COLOR_AMANECER  := Color(0.5, 0.15, 0.0, 0.25)      # naranja suave
 
-var _hora_actual: float = 0.5  # 0=medianoche 0.5=mediodía 1=medianoche
-var _hora_objetivo: float = 0.5
-var _material: ShaderMaterial
+var _color_actual: Color = COLOR_DIA
+var _color_objetivo: Color = COLOR_DIA
 
 @onready var overlay: ColorRect = $Overlay
 
 
 func _ready() -> void:
-	_material = ShaderMaterial.new()
-	_material.shader = load("res://shaders/dia_noche.gdshader")
-	overlay.material = _material
-	_actualizar_hora_desde_dia()
 	GameState.dia_avanzado.connect(_on_dia_avanzado)
+	_actualizar_objetivo()
 
 
 func _process(delta: float) -> void:
-	# Interpolar suavemente hacia la hora objetivo
-	_hora_actual = move_toward(_hora_actual, _hora_objetivo, delta / DURACION_TRANSICION)
-	_material.set_shader_parameter("hora_dia", _hora_actual)
+	_color_actual = _color_actual.lerp(_color_objetivo, delta / DURACION_TRANSICION)
+	overlay.color = _color_actual
 
 
 func _on_dia_avanzado(_dia: int) -> void:
-	_actualizar_hora_desde_dia()
+	_actualizar_objetivo()
 
 
-func _actualizar_hora_desde_dia() -> void:
-	var dia := GameState.dia_actual
-	# Cada 7 días = un ciclo completo día/noche simplificado
-	# Días 1-3: día, días 4-5: tarde/noche, días 6-7: madrugada
-	var fase := fmod(float(dia - 1), 7.0) / 7.0
-	_hora_objetivo = fase
+func _actualizar_objetivo() -> void:
+	# Ciclo de 7 días: 1-3 día, 4 atardecer, 5-6 noche, 7 amanecer
+	var fase := (GameState.dia_actual - 1) % 7
+	match fase:
+		0, 1, 2: _color_objetivo = COLOR_DIA
+		3:        _color_objetivo = COLOR_ATARDECER
+		4, 5:     _color_objetivo = COLOR_NOCHE
+		6:        _color_objetivo = COLOR_AMANECER
