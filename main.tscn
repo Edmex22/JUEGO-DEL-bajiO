@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scripts/evento_modal.gd" id="6_modal"]
 [ext_resource type="Script" path="res://scripts/main.gd" id="7_main"]
 [ext_resource type="Script" path="res://scripts/mapa.gd" id="8_mapa"]
+[ext_resource type="Script" path="res://scripts/player_sprite.gd" id="9_psprite"]
 
 [sub_resource type="RectangleShape2D" id="Shape_player"]
 size = Vector2(16, 16)
@@ -29,9 +30,8 @@ script = ExtResource("5_eventos")
 position = Vector2(0, 288)
 script = ExtResource("1_ig7tw")
 
-[node name="Sprite2D" type="Sprite2D" parent="Player"]
-scale = Vector2(0.15, 0.15)
-texture = ExtResource("2_0xm2m")
+[node name="PlayerSprite" type="Node2D" parent="Player"]
+script = ExtResource("9_psprite")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("Shape_player")

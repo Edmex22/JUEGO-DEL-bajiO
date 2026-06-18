@@ -200,8 +200,8 @@ func _draw() -> void:
 		TipoEdificio.HOSPITAL:    _draw_iso_hospital()
 		TipoEdificio.BANCO:       _draw_iso_banco()
 	var font := ThemeDB.fallback_font
-	draw_string(font, Vector2(-36, 28), nombre_edificio,
-		HORIZONTAL_ALIGNMENT_LEFT, 72, 9, Color("#F5F0E8"))
+	draw_string(font, Vector2(-60, 32), nombre_edificio,
+		HORIZONTAL_ALIGNMENT_LEFT, 120, 9, Color("#F5F0E8"))
 
 
 # Dibuja un bloque isométrico genérico dado colores de techo, cara izq y cara der
