@@ -318,28 +318,73 @@ mouse_filter = 2
 layer = 10
 script = ExtResource("4_hud")
 
-[node name="HUDPanel" type="PanelContainer" parent="HUD"]
-anchors_preset = 3
-anchor_left = 1.0
+[node name="BarraTop" type="PanelContainer" parent="HUD"]
+anchors_preset = 1
+anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 0.0
-offset_left = -420.0
-offset_top = 8.0
-offset_right = -8.0
-offset_bottom = 8.0
-grow_horizontal = 0
+offset_top = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="HUD/HUDPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="HUD/BarraTop"]
 layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 4
 
-[node name="HUDLabel" type="RichTextLabel" parent="HUD/HUDPanel/MarginContainer"]
-custom_minimum_size = Vector2(395, 0)
+[node name="HBox" type="HBoxContainer" parent="HUD/BarraTop/MarginContainer"]
 layout_mode = 2
+
+[node name="TopLabel" type="RichTextLabel" parent="HUD/BarraTop/MarginContainer/HBox"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+size_flags_horizontal = 3
 fit_content = true
 bbcode_enabled = true
+scroll_active = false
 text = "Cargando..."
+
+[node name="BtnStats" type="Button" parent="HUD/BarraTop"]
+layout_mode = 1
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -110.0
+offset_right = -4.0
+offset_top = 4.0
+offset_bottom = -4.0
+grow_horizontal = 0
+text = "📊 Stats"
+
+[node name="PanelStats" type="Panel" parent="HUD"]
+visible = false
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 4.0
+offset_top = 40.0
+offset_right = 400.0
+offset_bottom = 400.0
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD/PanelStats"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
+
+[node name="StatsLabel" type="RichTextLabel" parent="HUD/PanelStats/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+scroll_active = false
+text = ""
