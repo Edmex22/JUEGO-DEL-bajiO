@@ -231,9 +231,12 @@ func _bloque_iso(h: float, c_techo: String, c_izq: String, c_der: String) -> voi
 		Vector2(hw,  0),
 		Vector2(0,   hh),
 	])
-	draw_colored_polygon(izq,   PackedColorArray([Color(c_izq)]*4))
-	draw_colored_polygon(der,   PackedColorArray([Color(c_der)]*4))
-	draw_colored_polygon(techo, PackedColorArray([Color(c_techo)]*4))
+	var col_izq   := PackedColorArray([Color(c_izq),   Color(c_izq),   Color(c_izq),   Color(c_izq)])
+	var col_der   := PackedColorArray([Color(c_der),   Color(c_der),   Color(c_der),   Color(c_der)])
+	var col_techo := PackedColorArray([Color(c_techo), Color(c_techo), Color(c_techo), Color(c_techo)])
+	draw_colored_polygon(izq,   col_izq)
+	draw_colored_polygon(der,   col_der)
+	draw_colored_polygon(techo, col_techo)
 
 
 func _draw_iso_presidencia() -> void:
@@ -249,7 +252,8 @@ func _draw_iso_mercado() -> void:
 	var toldo := PackedVector2Array([
 		Vector2(0, -32-16), Vector2(32, -32), Vector2(0, -32+16), Vector2(-32, -32)
 	])
-	draw_colored_polygon(toldo, PackedColorArray([Color("#C0392B")]*4))
+	var col_toldo := PackedColorArray([Color("#C0392B"), Color("#C0392B"), Color("#C0392B"), Color("#C0392B")])
+	draw_colored_polygon(toldo, col_toldo)
 
 
 func _draw_iso_parque() -> void:
@@ -269,7 +273,8 @@ func _draw_iso_sat() -> void:
 	var franja := PackedVector2Array([
 		Vector2(-32, -12), Vector2(0, -12+16), Vector2(0, -8+16), Vector2(-32, -8)
 	])
-	draw_colored_polygon(franja, PackedColorArray([Color("#E74C3C")]*4))
+	var col_franja := PackedColorArray([Color("#E74C3C"), Color("#E74C3C"), Color("#E74C3C"), Color("#E74C3C")])
+	draw_colored_polygon(franja, col_franja)
 	var font := ThemeDB.fallback_font
 	draw_string(font, Vector2(-14, -38), "SAT", HORIZONTAL_ALIGNMENT_LEFT, 36, 8, Color("#E74C3C"))
 
