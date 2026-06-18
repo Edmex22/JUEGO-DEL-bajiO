@@ -63,12 +63,13 @@ func _ready() -> void:
 func _init_sprite() -> void:
 	if sprite_dia == null:
 		return
-	# Si hay PNG asignado, crear un Sprite2D y desactivar _draw()
 	_sprite_node = Sprite2D.new()
 	_sprite_node.texture = sprite_dia
 	_sprite_node.scale   = escala_sprite
-	# Pivot en la base isométrica del sprite (centro-inferior)
-	_sprite_node.offset  = Vector2(0, -sprite_dia.get_height() * escala_sprite.y * 0.5)
+	# Pivot: centrar horizontalmente, anclar en la base isométrica (75% del alto)
+	var tw := sprite_dia.get_width()  * escala_sprite.x
+	var th := sprite_dia.get_height() * escala_sprite.y
+	_sprite_node.offset = Vector2(0, -th * 0.25)
 	add_child(_sprite_node)
 
 

@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://scripts/mapa.gd" id="8_mapa"]
 [ext_resource type="Script" path="res://scripts/player_sprite.gd" id="9_psprite"]
 [ext_resource type="Script" path="res://scripts/ciclo_dia_noche.gd" id="10_ciclo"]
+[ext_resource type="Texture2D" path="res://assets/edificios/presidencia_dia.png" id="11_pres"]
 
 [sub_resource type="RectangleShape2D" id="Shape_player"]
 size = Vector2(16, 16)
@@ -43,6 +44,9 @@ zoom = Vector2(1.5, 1.5)
 [node name="PresidenciaMunicipal" type="Node2D" parent="."]
 position = Vector2(0, 128)
 script = ExtResource("3_h2yge")
+tipo = 0
+nombre_edificio = "Presidencia Municipal"
+sprite_dia = ExtResource("11_pres")
 
 [node name="InteractionArea" type="Area2D" parent="PresidenciaMunicipal"]
 
