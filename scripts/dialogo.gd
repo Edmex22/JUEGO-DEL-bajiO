@@ -19,7 +19,9 @@ var _char_idx: int = 0
 
 func _ready() -> void:
 	panel.visible = false
-	continuar_label.text = "▼ Presiona E para continuar"
+	continuar_label.text = "▼  E = continuar   Esc = cerrar"
+	# Debe procesar input aunque el árbol esté pausado
+	process_mode = Node.PROCESS_MODE_ALWAYS
 
 
 func _process(delta: float) -> void:
@@ -66,6 +68,11 @@ func _cerrar() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not panel.visible:
+		return
+	if event.is_action_pressed("ui_cancel"):
+		# Escape: cerrar diálogo inmediatamente
+		_cerrar()
+		get_viewport().set_input_as_handled()
 		return
 	if event.is_action_pressed("ui_accept") or event.is_action_pressed("interactuar"):
 		if _escribiendo:

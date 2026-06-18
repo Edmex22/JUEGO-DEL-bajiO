@@ -14,6 +14,8 @@ var _area: Area2D
 
 
 func _ready() -> void:
+	# El NPC siempre procesa input, incluso cuando el árbol está pausado (ej: durante diálogo)
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_area = _crear_area()
 	_area.body_entered.connect(_on_body_entered)
 	_area.body_exited.connect(_on_body_exited)
@@ -38,9 +40,13 @@ func _crear_etiqueta() -> Label:
 
 func _crear_area() -> Area2D:
 	var a := Area2D.new()
+	a.monitoring = true
+	a.monitorable = true
+	a.collision_layer = 0   # el área no está en ninguna capa física
+	a.collision_mask  = 1   # detecta cuerpos en capa 1 (donde está el jugador)
 	var s := CollisionShape2D.new()
 	var r := CircleShape2D.new()
-	r.radius = 40.0
+	r.radius = 48.0
 	s.shape = r
 	a.add_child(s)
 	add_child(a)

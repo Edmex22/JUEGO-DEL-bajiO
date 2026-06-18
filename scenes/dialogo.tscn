@@ -4,6 +4,7 @@
 
 [node name="Dialogo" type="CanvasLayer"]
 layer = 15
+process_mode = 4
 script = ExtResource("1_dial")
 
 [node name="PanelDialogo" type="Panel" parent="."]
