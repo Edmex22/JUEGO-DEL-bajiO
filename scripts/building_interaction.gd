@@ -5,6 +5,14 @@ enum TipoEdificio { PRESIDENCIA, MERCADO, PARQUE, SAT, HOSPITAL, BANCO }
 @export var tipo: TipoEdificio = TipoEdificio.PRESIDENCIA
 @export var nombre_edificio: String = "Edificio"
 
+# Si se asigna un sprite PNG desde el Inspector, se usa en lugar del _draw() de código
+@export var sprite_dia:   Texture2D = null
+@export var sprite_noche: Texture2D = null
+@export var escala_sprite: Vector2  = Vector2(1.0, 1.0)
+
+# Nodo Sprite2D interno creado en runtime cuando hay textura
+var _sprite_node: Sprite2D = null
+
 var player_nearby: bool = false
 var panel_open: bool = false
 
@@ -49,6 +57,28 @@ func _ready() -> void:
 	if interaction_label: interaction_label.visible = false
 	if government_panel:  government_panel.visible  = false
 	_limpiar_preview()
+	_init_sprite()
+
+
+func _init_sprite() -> void:
+	if sprite_dia == null:
+		return
+	# Si hay PNG asignado, crear un Sprite2D y desactivar _draw()
+	_sprite_node = Sprite2D.new()
+	_sprite_node.texture = sprite_dia
+	_sprite_node.scale   = escala_sprite
+	# Pivot en la base isométrica del sprite (centro-inferior)
+	_sprite_node.offset  = Vector2(0, -sprite_dia.get_height() * escala_sprite.y * 0.5)
+	add_child(_sprite_node)
+
+
+func _actualizar_sprite_dia_noche(es_noche: bool) -> void:
+	if _sprite_node == null:
+		return
+	if es_noche and sprite_noche != null:
+		_sprite_node.texture = sprite_noche
+	else:
+		_sprite_node.texture = sprite_dia
 
 
 func _conectar_botones() -> void:
@@ -192,6 +222,8 @@ func _on_body_exited(body: Node2D) -> void:
 # base (rombo en el suelo) + cara izquierda + cara derecha + techo
 
 func _draw() -> void:
+	if sprite_dia != null:
+		return  # hay PNG asignado, no dibujar en código
 	match tipo:
 		TipoEdificio.PRESIDENCIA: _draw_iso_presidencia()
 		TipoEdificio.MERCADO:     _draw_iso_mercado()
