@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-@onready var barra_top: RichTextLabel = $BarraTop/MarginContainer/TopLabel
+@onready var barra_top: RichTextLabel   = $BarraTop/MarginContainer/HBox/TopLabel
 @onready var panel_stats: Panel       = $PanelStats
 @onready var stats_label: RichTextLabel = $PanelStats/MarginContainer/StatsLabel
 @onready var btn_toggle: Button       = $BarraTop/BtnStats
