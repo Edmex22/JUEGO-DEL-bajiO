@@ -141,9 +141,9 @@ func _process(_delta: float) -> void:
 
 func _entrar_edificio() -> void:
 	# Vibrar cámara antes del fade
-	var camara: Camera2D = get_tree().get_first_node_in_group("player")
-	if camara:
-		var cam := camara.get_node_or_null("Camera2D")
+	var jugador := get_tree().get_first_node_in_group("player")
+	if jugador:
+		var cam := jugador.get_node_or_null("Camera2D")
 		if cam and cam.has_method("vibrar"):
 			cam.vibrar(0.5)
 	if has_node("/root/Transicion"):
