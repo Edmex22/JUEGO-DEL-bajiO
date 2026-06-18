@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://parque_principal"]
+
+[ext_resource type="Script" path="res://scripts/parque_interior.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/player.gd.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/player_sprite.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/npc.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/camara.gd" id="5"]
+
+[sub_resource type="RectangleShape2D" id="Shape_player"]
+size = Vector2(14, 14)
+[sub_resource type="RectangleShape2D" id="Shape_salida"]
+size = Vector2(72, 28)
+
+[node name="ParquePrincipal" type="Node2D"]
+script = ExtResource("1")
+escena_destino = "res://main.tscn"
+posicion_llegada = Vector2(-256, 800)
+ancho = 640
+alto = 480
+
+[node name="Fondo" type="Node2D" parent="."]
+
+[node name="Player" type="CharacterBody2D" parent="." groups=["player"]]
+position = Vector2(320, 400)
+script = ExtResource("2")
+[node name="PlayerSprite" type="Node2D" parent="Player"]
+script = ExtResource("3")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("Shape_player")
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(2.0, 2.0)
+script = ExtResource("5")
+
+[node name="ZonaSalida" type="Area2D" parent="."]
+position = Vector2(320, 458)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ZonaSalida"]
+shape = SubResource("Shape_salida")
+
+[node name="AbueloJose" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(240, 200)
+script = ExtResource("4")
+nombre_npc = "Don José"
+rol = "Vecino"
+dialogos = ["Aquí vengo todos los días a mi caminata.", "Este parque lo construyeron hace 40 años, cuando yo era joven.", "Antes había más árboles, fueron cortando algunos.", "El kiosco nuevo está muy bonito.", "Ojalá pusieran más bancas, a veces no hay donde sentarse."]
+
+[node name="MamaConNino" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(420, 200)
+script = ExtResource("4")
+nombre_npc = "Sofía Mendez"
+rol = "Mamá"
+dialogos = ["A mi hijo le encanta venir a los juegos.", "Necesitan arreglar el columpio, está oxidado.", "El parque es lo mejor del barrio para las familias.", "¿Sabe si van a poner más iluminación? De noche da miedo."]
+dialogos_noche = ["De noche el parque se siente inseguro, hace falta más luz.", "No me gusta traer a mi hijo tan tarde, pero no tuve opción."]
+
+[node name="Deportista" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(160, 300)
+script = ExtResource("4")
+nombre_npc = "Roberto Fuentes"
+rol = "Deportista"
+dialogos = ["Corro aquí todos los días a las 6am.", "El circuito de atletismo debería ser más largo.", "Sería genial tener máquinas de ejercicio al aire libre.", "El parque está bien mantenido, felicidades al municipio."]
+dialogos_bajo_presupuesto = ["Últimamente el pasto no lo cortan seguido.", "Se nota que hay recorte, el mantenimiento bajó mucho."]
+
+[node name="VendedorKiosco" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(60, 240)
+script = ExtResource("4")
+nombre_npc = "Toño"
+rol = "Vendedor"
+dialogos = ["¡Elotes, esquites, aguas frescas!", "El kiosco lo rento al municipio, ojalá no suban la cuota.", "Los fines de semana vendo el doble.", "¿Le pongo chile y limón al elote?"]
+
+[node name="UI" type="CanvasLayer" parent="."]
+[node name="LabelSalida" type="Label" parent="UI"]
+visible = false
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 50.0
+text = "E — Salir del Parque"

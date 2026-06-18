@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://hospital_quirofano"]
+
+[ext_resource type="Script" path="res://scripts/hospital_quirofano.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/player.gd.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/player_sprite.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/npc.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/puerta.gd" id="5"]
+[ext_resource type="Script" path="res://scripts/camara.gd" id="6"]
+
+[sub_resource type="RectangleShape2D" id="Shape_player"]
+size = Vector2(14, 14)
+[sub_resource type="RectangleShape2D" id="Shape_salida"]
+size = Vector2(56, 28)
+
+[node name="HospitalQuirofano" type="Node2D"]
+script = ExtResource("1")
+escena_destino = "res://scenes/hospital/principal.tscn"
+posicion_llegada = Vector2(568, 300)
+ancho = 640
+alto = 480
+
+[node name="Fondo" type="Node2D" parent="."]
+
+[node name="Player" type="CharacterBody2D" parent="." groups=["player"]]
+position = Vector2(100, 420)
+script = ExtResource("2")
+[node name="PlayerSprite" type="Node2D" parent="Player"]
+script = ExtResource("3")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("Shape_player")
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(2.0, 2.0)
+script = ExtResource("6")
+
+[node name="ZonaSalida" type="Area2D" parent="."]
+position = Vector2(320, 450)
+script = ExtResource("5")
+escena_destino = "res://scenes/hospital/principal.tscn"
+posicion_llegada = Vector2(568, 300)
+etiqueta = "E — Regresar a Recepción"
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ZonaSalida"]
+shape = SubResource("Shape_salida")
+
+[node name="CirujanoJefe" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(160, 260)
+script = ExtResource("4")
+nombre_npc = "Dr. Castillo"
+rol = "Cirujano"
+dialogos = ["Este quirófano tiene 15 años sin renovación de equipo.", "Necesitamos un nuevo monitor de anestesia urgente.", "Hacemos hasta 3 cirugías diarias con lo que tenemos.", "La inversión en salud siempre se recupera, señor alcalde."]
+dialogos_bajo_presupuesto = ["Sin presupuesto no podemos operar con seguridad.", "Le pido que priorice el equipamiento del quirófano."]
+
+[node name="UI" type="CanvasLayer" parent="."]
+[node name="LabelSalida" type="Label" parent="UI"]
+visible = false
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 50.0
+text = "E — Regresar a Recepción"

@@ -66,6 +66,7 @@ tipo = 1
 nombre_edificio = "Mercado Municipal"
 sprite_dia = ExtResource("13_merc")
 escala_sprite = Vector2(0.6, 0.6)
+escena_interior = "res://scenes/mercado/principal.tscn"
 
 [node name="InteractionArea" type="Area2D" parent="MercadoMunicipal"]
 
@@ -77,6 +78,7 @@ position = Vector2(-256, 800)
 script = ExtResource("3_h2yge")
 tipo = 2
 nombre_edificio = "Parque Central"
+escena_interior = "res://scenes/parque/principal.tscn"
 
 [node name="InteractionArea" type="Area2D" parent="ParqueCentral"]
 
@@ -88,6 +90,7 @@ position = Vector2(-32, 304)
 script = ExtResource("3_h2yge")
 tipo = 3
 nombre_edificio = "Oficinas del SAT"
+escena_interior = "res://scenes/sat/principal.tscn"
 
 [node name="InteractionArea" type="Area2D" parent="OficinasSAT"]
 
@@ -101,6 +104,7 @@ tipo = 4
 nombre_edificio = "Hospital General"
 sprite_dia = ExtResource("14_hosp")
 escala_sprite = Vector2(0.6, 0.6)
+escena_interior = "res://scenes/hospital/principal.tscn"
 
 [node name="InteractionArea" type="Area2D" parent="Hospital"]
 
@@ -112,6 +116,7 @@ position = Vector2(32, 816)
 script = ExtResource("3_h2yge")
 tipo = 5
 nombre_edificio = "Banco Municipal"
+escena_interior = "res://scenes/banco/principal.tscn"
 
 [node name="InteractionArea" type="Area2D" parent="Banco"]
 

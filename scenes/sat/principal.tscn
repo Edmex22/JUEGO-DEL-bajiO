@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://sat_principal"]
+
+[ext_resource type="Script" path="res://scripts/sat_interior.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/player.gd.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/player_sprite.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/npc.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/camara.gd" id="5"]
+
+[sub_resource type="RectangleShape2D" id="Shape_player"]
+size = Vector2(14, 14)
+[sub_resource type="RectangleShape2D" id="Shape_salida"]
+size = Vector2(72, 28)
+
+[node name="SatPrincipal" type="Node2D"]
+script = ExtResource("1")
+escena_destino = "res://main.tscn"
+posicion_llegada = Vector2(-32, 304)
+ancho = 640
+alto = 480
+
+[node name="Fondo" type="Node2D" parent="."]
+
+[node name="Player" type="CharacterBody2D" parent="." groups=["player"]]
+position = Vector2(320, 400)
+script = ExtResource("2")
+[node name="PlayerSprite" type="Node2D" parent="Player"]
+script = ExtResource("3")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("Shape_player")
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(2.0, 2.0)
+script = ExtResource("5")
+
+[node name="ZonaSalida" type="Area2D" parent="."]
+position = Vector2(320, 458)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ZonaSalida"]
+shape = SubResource("Shape_salida")
+
+[node name="AgenteFiscal" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(120, 148)
+script = ExtResource("4")
+nombre_npc = "C.P. Humberto Salas"
+rol = "Agente Fiscal"
+dialogos = ["Buenos días. ¿Tiene su RFC a la mano?", "Recuerde que la declaración anual vence en abril.", "Las personas físicas con actividad empresarial deben declarar bimestralmente.", "Si tiene dudas sobre su régimen fiscal, le puedo orientar.", "El SAT tiene un portal en línea para hacer trámites sin venir aquí."]
+dialogos_bajo_presupuesto = ["Con el recorte, tenemos menos auditores activos.", "La evasión fiscal sube cuando hay menos fiscalización."]
+
+[node name="ContribuyenteDon" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(160, 280)
+script = ExtResource("4")
+nombre_npc = "Don Aurelio"
+rol = "Contribuyente"
+dialogos = ["Vine a tramitar mi RFC por primera vez.", "Mi negocio lleva 2 años y hasta ahora vengo a regularizarme.", "¿Es muy complicado el trámite?", "Espero que no me pongan multa por el retraso."]
+
+[node name="ContribuyenteSra" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(300, 280)
+script = ExtResource("4")
+nombre_npc = "Sra. Beatriz"
+rol = "Contribuyente"
+dialogos = ["Vine a aclarar una diferencia en mi declaración.", "Me llegó un requerimiento del SAT y no entiendo qué piden.", "Ya contraté a un contador, pero me dijo que viniera yo.", "El trámite en línea me falló tres veces, por eso vine en persona."]
+
+[node name="OrientadorSAT" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(460, 280)
+script = ExtResource("4")
+nombre_npc = "Lic. Patricia Leal"
+rol = "Orientadora SAT"
+dialogos = ["¿En qué le puedo ayudar?", "Para el régimen simplificado de confianza, la tasa es del 1 al 2.5%.", "El CFDI es el comprobante fiscal digital, necesita uno por cada venta.", "Si factura menos de $3.5 millones al año, está en el régimen simplificado."]
+
+[node name="UI" type="CanvasLayer" parent="."]
+[node name="LabelSalida" type="Label" parent="UI"]
+visible = false
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 50.0
+text = "E — Salir del SAT"

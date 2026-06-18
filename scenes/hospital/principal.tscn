@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://hospital_principal"]
+
+[ext_resource type="Script" path="res://scripts/hospital_interior.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/player.gd.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/player_sprite.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/npc.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/puerta.gd" id="5"]
+[ext_resource type="Script" path="res://scripts/camara.gd" id="6"]
+
+[sub_resource type="RectangleShape2D" id="Shape_player"]
+size = Vector2(14, 14)
+[sub_resource type="RectangleShape2D" id="Shape_salida"]
+size = Vector2(72, 28)
+[sub_resource type="RectangleShape2D" id="Shape_quirofano"]
+size = Vector2(56, 28)
+
+[node name="HospitalPrincipal" type="Node2D"]
+script = ExtResource("1")
+escena_destino = "res://main.tscn"
+posicion_llegada = Vector2(512, 576)
+ancho = 640
+alto = 480
+
+[node name="Fondo" type="Node2D" parent="."]
+
+[node name="Player" type="CharacterBody2D" parent="." groups=["player"]]
+position = Vector2(320, 400)
+script = ExtResource("2")
+[node name="PlayerSprite" type="Node2D" parent="Player"]
+script = ExtResource("3")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("Shape_player")
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(2.0, 2.0)
+script = ExtResource("6")
+
+[node name="ZonaSalida" type="Area2D" parent="."]
+position = Vector2(320, 458)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ZonaSalida"]
+shape = SubResource("Shape_salida")
+
+[node name="PuertaQuirofano" type="Area2D" parent="."]
+position = Vector2(568, 386)
+script = ExtResource("5")
+escena_destino = "res://scenes/hospital/quirofano.tscn"
+posicion_llegada = Vector2(100, 420)
+etiqueta = "E — Quirófano (acceso restringido)"
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PuertaQuirofano"]
+shape = SubResource("Shape_quirofano")
+
+[node name="DrRamirez" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(320, 148)
+script = ExtResource("4")
+nombre_npc = "Dr. Ramírez"
+rol = "Director Médico"
+dialogos = ["Bienvenido al Hospital General.", "Tenemos capacidad para 120 camas, pero necesitamos más.", "La falta de medicamentos es nuestro problema principal.", "Necesitamos al menos 3 médicos especialistas más.", "La campaña de vacunación fue un éxito este año."]
+dialogos_bajo_presupuesto = ["Con este presupuesto no podemos atender la demanda.", "Estamos operando con el 60% del personal necesario.", "Por favor gestione más recursos para el hospital."]
+
+[node name="EnfermeraLupe" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(140, 270)
+script = ExtResource("4")
+nombre_npc = "Enf. Guadalupe"
+rol = "Enfermera Jefa"
+dialogos = ["Por favor tome asiento, le atendemos en breve.", "Las consultas generales son de 8am a 3pm.", "Traiga su CURP y cartilla de vacunación.", "El área de urgencias está disponible las 24 horas."]
+
+[node name="PacienteSr" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(80, 270)
+script = ExtResource("4")
+nombre_npc = "Sr. Domínguez"
+rol = "Paciente"
+dialogos = ["Llevo 2 horas esperando mi turno.", "Vine por el dolor de espalda que tengo hace semanas.", "Dicen que el doctor llega tarde hoy.", "Espero que alcance el turno..."]
+
+[node name="PacienteSra" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(180, 330)
+script = ExtResource("4")
+nombre_npc = "Sra. Velázquez"
+rol = "Paciente"
+dialogos = ["Vine a traer a mi mamá a revisión.", "¿Sabe si hay médico pediatra hoy?", "La sala de espera siempre está llena, debería ampliarse."]
+
+[node name="UI" type="CanvasLayer" parent="."]
+[node name="LabelSalida" type="Label" parent="UI"]
+visible = false
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 50.0
+text = "E — Salir del Hospital"

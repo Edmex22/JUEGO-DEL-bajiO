@@ -1,0 +1,80 @@
+[gd_scene format=3 uid="uid://banco_principal"]
+
+[ext_resource type="Script" path="res://scripts/banco_interior.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/player.gd.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/player_sprite.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/npc.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/puerta.gd" id="5"]
+[ext_resource type="Script" path="res://scripts/camara.gd" id="6"]
+
+[sub_resource type="RectangleShape2D" id="Shape_player"]
+size = Vector2(14, 14)
+[sub_resource type="RectangleShape2D" id="Shape_salida"]
+size = Vector2(72, 28)
+[sub_resource type="RectangleShape2D" id="Shape_gerencia"]
+size = Vector2(56, 28)
+
+[node name="BancoPrincipal" type="Node2D"]
+script = ExtResource("1")
+escena_destino = "res://main.tscn"
+posicion_llegada = Vector2(32, 816)
+ancho = 640
+alto = 480
+
+[node name="Fondo" type="Node2D" parent="."]
+
+[node name="Player" type="CharacterBody2D" parent="." groups=["player"]]
+position = Vector2(320, 400)
+script = ExtResource("2")
+[node name="PlayerSprite" type="Node2D" parent="Player"]
+script = ExtResource("3")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("Shape_player")
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(2.0, 2.0)
+script = ExtResource("6")
+
+[node name="ZonaSalida" type="Area2D" parent="."]
+position = Vector2(320, 458)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ZonaSalida"]
+shape = SubResource("Shape_salida")
+
+[node name="PuertaGerencia" type="Area2D" parent="."]
+position = Vector2(568, 386)
+script = ExtResource("5")
+escena_destino = "res://scenes/banco/gerencia.tscn"
+posicion_llegada = Vector2(100, 420)
+etiqueta = "E — Entrar a Gerencia"
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PuertaGerencia"]
+shape = SubResource("Shape_gerencia")
+
+[node name="CajeroAlejandra" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(460, 148)
+script = ExtResource("4")
+nombre_npc = "Alejandra Ríos"
+rol = "Cajera"
+dialogos = ["Bienvenido al Banco Municipal. ¿En qué le ayudo?", "Para abrir una cuenta necesita INE, CURP y comprobante de domicilio.", "Las transferencias tienen un costo de $15 si son a otro banco.", "¿Le interesa conocer nuestras opciones de ahorro?"]
+
+[node name="AsesorCredito" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(340, 300)
+script = ExtResource("4")
+nombre_npc = "Lic. Gerardo Vega"
+rol = "Asesor de Créditos"
+dialogos = ["Tenemos créditos para pequeñas empresas desde $50,000.", "La tasa de interés anual es del 12% para PyMEs.", "Para un crédito hipotecario, se requiere el 20% de enganche.", "¿Tiene usted historial crediticio en el buró?", "El municipio tiene convenio con nosotros para proyectos de infraestructura."]
+dialogos_bajo_presupuesto = ["Veo que el municipio tiene cierta presión financiera.", "Un préstamo revolvente podría ayudar con el flujo de caja."]
+
+[node name="ClienteEspera" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(160, 330)
+script = ExtResource("4")
+nombre_npc = "Don Macario"
+rol = "Cliente"
+dialogos = ["Vine a pagar mi crédito del taller.", "Este banco es bueno, siempre me han tratado bien.", "Llevo 10 años siendo cliente aquí.", "¿Cuánto tiempo tarda el trámite de la cuenta de nómina?"]
+
+[node name="UI" type="CanvasLayer" parent="."]
+[node name="LabelSalida" type="Label" parent="UI"]
+visible = false
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 50.0
+text = "E — Salir del Banco"

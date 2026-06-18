@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://mercado_principal"]
+
+[ext_resource type="Script" path="res://scripts/mercado_interior.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/player.gd.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/player_sprite.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/npc.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/camara.gd" id="5"]
+
+[sub_resource type="RectangleShape2D" id="Shape_player"]
+size = Vector2(14, 14)
+[sub_resource type="RectangleShape2D" id="Shape_salida"]
+size = Vector2(72, 28)
+
+[node name="MercadoPrincipal" type="Node2D"]
+script = ExtResource("1")
+escena_destino = "res://main.tscn"
+posicion_llegada = Vector2(-512, 544)
+ancho = 640
+alto = 480
+
+[node name="Fondo" type="Node2D" parent="."]
+
+[node name="Player" type="CharacterBody2D" parent="." groups=["player"]]
+position = Vector2(320, 400)
+script = ExtResource("2")
+[node name="PlayerSprite" type="Node2D" parent="Player"]
+script = ExtResource("3")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("Shape_player")
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(2.0, 2.0)
+script = ExtResource("5")
+
+[node name="ZonaSalida" type="Area2D" parent="."]
+position = Vector2(320, 458)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ZonaSalida"]
+shape = SubResource("Shape_salida")
+
+[node name="DonaPilar" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(90, 140)
+script = ExtResource("4")
+nombre_npc = "Doña Pilar"
+rol = "Verdulera"
+dialogos = ["¡Llévele, llévele! Jitomates frescos del rancho.", "La col y el chile están en oferta hoy.", "Si compra por kilo le doy un jitomate de pilón.", "Los vegetales orgánicos los traen los martes."]
+dialogos_bajo_presupuesto = ["Ay, con esta crisis, las ventas están muy bajas.", "La gente ya no compra igual desde que subieron los precios."]
+
+[node name="DonChuy" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(250, 140)
+script = ExtResource("4")
+nombre_npc = "Don Chucho"
+rol = "Carnicero"
+dialogos = ["Buenos días. ¿Qué se le ofrece?", "Tenemos arrachera, costilla y machaca.", "La carne de res viene directa de los ranchos del municipio.", "¿Le pongo algo para el fin de semana?"]
+
+[node name="SeñoraMarta" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(410, 140)
+script = ExtResource("4")
+nombre_npc = "Sra. Marta"
+rol = "Hierbera"
+dialogos = ["Tengo manzanilla, hierba santa y epazote.", "El té de canela con jengibre quita el frío.", "Estas hierbas son medicinales, vienen de la sierra.", "Para el dolor de estómago, nada como la menta."]
+
+[node name="AdministradorMercado" type="CharacterBody2D" parent="." groups=["npcs"]]
+position = Vector2(320, 280)
+script = ExtResource("4")
+nombre_npc = "Lic. Fernanda Cruz"
+rol = "Administradora"
+dialogos = ["El mercado tiene 85 locales activos.", "Necesitamos mantenimiento en el área de pescadería.", "Las rentas de locales son una fuente de ingreso municipal.", "¿Sabe que el mercado genera 200 empleos directos?"]
+dialogos_bajo_presupuesto = ["Sin inversión municipal, el mercado se está deteriorando.", "Los locatarios piden mejoras urgentes en la instalación eléctrica."]
+
+[node name="UI" type="CanvasLayer" parent="."]
+[node name="LabelSalida" type="Label" parent="UI"]
+visible = false
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 50.0
+text = "E — Salir del Mercado"
