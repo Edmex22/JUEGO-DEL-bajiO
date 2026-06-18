@@ -83,6 +83,7 @@ func _cb(btn: Button, accion: Callable, preview: String) -> void:
 
 
 func _process(_delta: float) -> void:
+	z_index = int(global_position.y)
 	if player_nearby and Input.is_action_just_pressed("interact"):
 		panel_open = !panel_open
 		if government_panel:
@@ -191,7 +192,6 @@ func _on_body_exited(body: Node2D) -> void:
 # base (rombo en el suelo) + cara izquierda + cara derecha + techo
 
 func _draw() -> void:
-	z_index = int(global_position.y)
 	match tipo:
 		TipoEdificio.PRESIDENCIA: _draw_iso_presidencia()
 		TipoEdificio.MERCADO:     _draw_iso_mercado()
@@ -238,92 +238,82 @@ func _bloque_iso(h: float, c_techo: String, c_izq: String, c_der: String) -> voi
 
 
 func _draw_iso_presidencia() -> void:
-	var hw := 52.0   # más grande que un tile normal
-	var hh := 26.0
-	var h  := 58.0
+	var hw := 44.0
+	var hh := 22.0
+	var h  := 52.0
 
-	# === ESCALINATA (3 escalones frontales) ===
+	# === ESCALINATA ===
 	for i in range(3):
-		var ofs := float(i) * 5.0
+		var o := float(i) * 4.0
 		draw_colored_polygon(PackedVector2Array([
-			Vector2(-hw + ofs,        ofs),
-			Vector2(-hw*0.3 + ofs,    ofs + hh*0.4),
-			Vector2(-hw*0.3 + ofs+6,  ofs + hh*0.4 + 3),
-			Vector2(-hw + ofs+6,      ofs + 3),
+			Vector2(-hw*0.7 + o, o + 2),
+			Vector2(0 + o*0.3,   o + hh*0.5 + 2),
+			Vector2(0 + o*0.3+4, o + hh*0.5 + 4),
+			Vector2(-hw*0.7 + o+4, o + 4),
 		]), Color("#D4C8A8"))
 
 	# === CUERPO PRINCIPAL ===
-	# Cara izquierda (fachada principal - crema media)
 	draw_colored_polygon(PackedVector2Array([
 		Vector2(-hw, -h), Vector2(0, -h+hh), Vector2(0, hh), Vector2(-hw, 0)
 	]), Color("#D4C8A8"))
-	# Cara derecha (lateral - crema oscuro)
 	draw_colored_polygon(PackedVector2Array([
 		Vector2(0, -h+hh), Vector2(hw, -h), Vector2(hw, 0), Vector2(0, hh)
 	]), Color("#B8A99A"))
 
-	# === TECHO PLANO con tejas terracota ===
+	# === TECHO TERRACOTA ===
 	draw_colored_polygon(PackedVector2Array([
 		Vector2(0, -h-hh), Vector2(hw, -h), Vector2(0, -h+hh), Vector2(-hw, -h)
 	]), Color("#C4573A"))
-	# Líneas de tejas en el techo
-	for i in range(1, 4):
-		var t := float(i) / 4.0
-		draw_line(
-			Vector2(-hw + hw*t, -h - hh + hh*t),
-			Vector2(hw*t,       -h - hh + hh*t + hh),
+	for i in range(1, 5):
+		var t := float(i) / 5.0
+		draw_line(Vector2(-hw*t, -h - hh*(1.0-t)), Vector2(hw*(1.0-t), -h - hh*(1.0-t) + hh),
 			Color("#8B3A2A"), 1.0)
 
-	# === ARCOS EN FACHADA (3 arcos) ===
-	for i in range(3):
-		var ax := -hw + 10.0 + float(i) * 15.0
-		var ay := -h*0.45 + float(i) * 4.0
-		# Puerta/arco oscuro
-		draw_colored_polygon(PackedVector2Array([
-			Vector2(ax,   ay),      Vector2(ax+7,  ay-3),
-			Vector2(ax+7, ay+14),   Vector2(ax,    ay+18),
-		]), Color("#5C3A2A"))
-		# Marco crema
-		draw_line(Vector2(ax-1, ay), Vector2(ax-1, ay+18), Color("#E8DCC4"), 1.5)
-		draw_line(Vector2(ax+8, ay-3), Vector2(ax+8, ay+14), Color("#E8DCC4"), 1.5)
-
-	# === VENTANAS EN FACHADA ===
-	for i in range(2):
-		var wx := -hw + 8.0 + float(i) * 16.0
-		var wy := -h*0.75 + float(i) * 3.0
-		draw_colored_polygon(PackedVector2Array([
-			Vector2(wx, wy), Vector2(wx+6, wy-3),
-			Vector2(wx+6, wy+8), Vector2(wx, wy+11),
-		]), Color("#4A5F7A"))
-		draw_line(Vector2(wx-1, wy-1), Vector2(wx+7, wy-4), Color("#F5EDD9"), 1.0)
-
-	# === CORNISA (franja decorativa) ===
+	# === CORNISA ===
 	draw_colored_polygon(PackedVector2Array([
-		Vector2(-hw, -h+2), Vector2(0, -h+hh+2), Vector2(0, -h+hh+6), Vector2(-hw, -h+6)
+		Vector2(-hw, -h+2), Vector2(0, -h+hh+2), Vector2(0, -h+hh+5), Vector2(-hw, -h+5)
 	]), Color("#E8DCC4"))
 	draw_colored_polygon(PackedVector2Array([
-		Vector2(0, -h+hh+2), Vector2(hw, -h+2), Vector2(hw, -h+6), Vector2(0, -h+hh+6)
+		Vector2(0, -h+hh+2), Vector2(hw, -h+2), Vector2(hw, -h+5), Vector2(0, -h+hh+5)
 	]), Color("#D4C8A8"))
 
-	# === TORRES ESQUINERAS (4) ===
-	var torres := [
-		Vector2(-hw, -h), Vector2(hw, -h),
-		Vector2(-hw*0.5, -h - hh*0.5), Vector2(hw*0.5, -h - hh*0.5)
-	]
-	for tp in torres:
-		_mini_cupula(tp, 9.0, 18.0)
+	# === ARCOS FACHADA (cara izquierda) ===
+	for i in range(3):
+		var t  := float(i) / 2.0
+		var ax := -hw + 8 + t * (hw - 10)
+		var ay := (-h + hh) * (1.0 - t*0.15) - 10
+		draw_colored_polygon(PackedVector2Array([
+			Vector2(ax, ay), Vector2(ax+6, ay-2),
+			Vector2(ax+6, ay+12), Vector2(ax, ay+14),
+		]), Color("#5C3A2A"))
+
+	# === VENTANAS CARA DERECHA ===
+	for i in range(3):
+		var t  := float(i) / 2.0
+		var wx := t * (hw - 10)
+		var wy := (-h + hh) * (1.0 - t*0.1) - 8
+		draw_colored_polygon(PackedVector2Array([
+			Vector2(wx, wy), Vector2(wx+8, wy-3),
+			Vector2(wx+8, wy+6), Vector2(wx, wy+9),
+		]), Color("#4A5F7A"))
+
+	# === TORRES ESQUINERAS ===
+	_mini_cupula(Vector2(-hw,      -h      ), 7.0, 14.0)
+	_mini_cupula(Vector2( hw,      -h      ), 7.0, 14.0)
+	_mini_cupula(Vector2(-hw*0.45, -h-hh*0.4), 6.0, 12.0)
+	_mini_cupula(Vector2( hw*0.45, -h-hh*0.4), 6.0, 12.0)
 
 	# === CÚPULA CENTRAL ===
-	_cupula_central(Vector2(0, -h - hh - 2), 18.0, 38.0)
+	_cupula_central(Vector2(0.0, -h - hh), 16.0, 32.0)
 
-	# === FAROLES en escalinata ===
-	_farol(Vector2(-hw - 4, 2))
-	_farol(Vector2(-hw*0.3 - 4, hh*0.4 + 2))
+	# === FAROLES ===
+	_farol(Vector2(-hw*0.8, 4.0))
+	_farol(Vector2(-hw*0.2, hh*0.4 + 4.0))
 
-	# === ESCUDO / LETRERO ===
+	# === LETRERO ===
 	var font := ThemeDB.fallback_font
-	draw_string(font, Vector2(-hw + 6, -h*0.25), "PRESIDENCIA",
-		HORIZONTAL_ALIGNMENT_LEFT, hw*2 - 6, 7, Color("#F5EDD9"))
+	draw_string(font, Vector2(-38, -h*0.2), "PRESIDENCIA",
+		HORIZONTAL_ALIGNMENT_LEFT, 76, 7, Color("#F5EDD9"))
 
 
 func _cupula_central(centro: Vector2, radio: float, altura: float) -> void:
