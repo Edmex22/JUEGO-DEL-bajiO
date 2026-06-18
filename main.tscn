@@ -32,7 +32,7 @@ script = ExtResource("8_mapa")
 script = ExtResource("5_eventos")
 
 [node name="Player" type="CharacterBody2D" parent="." groups=["player"]]
-position = Vector2(0, 288)
+position = Vector2(0, 608)
 script = ExtResource("1_ig7tw")
 
 [node name="PlayerSprite" type="Node2D" parent="Player"]
@@ -46,7 +46,7 @@ zoom = Vector2(1.5, 1.5)
 script = ExtResource("12_camara")
 
 [node name="PresidenciaMunicipal" type="Node2D" parent="."]
-position = Vector2(0, 128)
+position = Vector2(0, 448)
 script = ExtResource("3_h2yge")
 tipo = 0
 nombre_edificio = "Presidencia Municipal"
@@ -59,8 +59,10 @@ escena_interior = "res://scenes/presidencia/recepcion.tscn"
 shape = SubResource("Shape_interact")
 
 [node name="MercadoMunicipal" type="Node2D" parent="."]
-position = Vector2(-192, 224)
+position = Vector2(-480, 608)
 script = ExtResource("3_h2yge")
+tipo = 1
+nombre_edificio = "Mercado Municipal"
 sprite_dia = ExtResource("13_merc")
 
 [node name="InteractionArea" type="Area2D" parent="MercadoMunicipal"]
@@ -69,8 +71,10 @@ sprite_dia = ExtResource("13_merc")
 shape = SubResource("Shape_interact")
 
 [node name="ParqueCentral" type="Node2D" parent="."]
-position = Vector2(192, 224)
+position = Vector2(480, 768)
 script = ExtResource("3_h2yge")
+tipo = 2
+nombre_edificio = "Parque Central"
 
 [node name="InteractionArea" type="Area2D" parent="ParqueCentral"]
 
@@ -78,8 +82,10 @@ script = ExtResource("3_h2yge")
 shape = SubResource("Shape_interact")
 
 [node name="OficinasSAT" type="Node2D" parent="."]
-position = Vector2(-320, 96)
+position = Vector2(-480, 288)
 script = ExtResource("3_h2yge")
+tipo = 3
+nombre_edificio = "Oficinas del SAT"
 
 [node name="InteractionArea" type="Area2D" parent="OficinasSAT"]
 
@@ -87,8 +93,10 @@ script = ExtResource("3_h2yge")
 shape = SubResource("Shape_interact")
 
 [node name="Hospital" type="Node2D" parent="."]
-position = Vector2(320, 96)
+position = Vector2(480, 448)
 script = ExtResource("3_h2yge")
+tipo = 4
+nombre_edificio = "Hospital General"
 sprite_dia = ExtResource("14_hosp")
 
 [node name="InteractionArea" type="Area2D" parent="Hospital"]
@@ -97,8 +105,10 @@ sprite_dia = ExtResource("14_hosp")
 shape = SubResource("Shape_interact")
 
 [node name="Banco" type="Node2D" parent="."]
-position = Vector2(0, 32)
+position = Vector2(0, 768)
 script = ExtResource("3_h2yge")
+tipo = 5
+nombre_edificio = "Banco Municipal"
 
 [node name="InteractionArea" type="Area2D" parent="Banco"]
 
@@ -109,10 +119,15 @@ shape = SubResource("Shape_interact")
 
 [node name="InteractionLabel" type="Label" parent="UI"]
 visible = false
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 420.0
-offset_bottom = 60.0
+anchors_preset = 7
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -80.0
+offset_bottom = -44.0
+grow_vertical = 0
+horizontal_alignment = 1
 text = "Presiona E para interactuar"
 
 [node name="GovernmentPanel" type="Panel" parent="UI"]
