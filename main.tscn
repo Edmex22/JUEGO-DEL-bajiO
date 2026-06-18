@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://r7hkwx0h8lhw"]
 
 [ext_resource type="Script" uid="uid://dnsqh6qnwglrp" path="res://scripts/player.gd.gd" id="1_ig7tw"]
+[ext_resource type="Script" path="res://scripts/camara.gd" id="12_camara"]
 [ext_resource type="Texture2D" uid="uid://c62y4blrnh188" path="res://icon.svg" id="2_0xm2m"]
 [ext_resource type="Script" uid="uid://dfgjnw1ytd3iq" path="res://scripts/building_interaction.gd" id="3_h2yge"]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="4_hud"]
@@ -40,6 +41,7 @@ shape = SubResource("Shape_player")
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(1.5, 1.5)
+script = ExtResource("12_camara")
 
 [node name="PresidenciaMunicipal" type="Node2D" parent="."]
 position = Vector2(0, 128)
@@ -47,6 +49,7 @@ script = ExtResource("3_h2yge")
 tipo = 0
 nombre_edificio = "Presidencia Municipal"
 sprite_dia = ExtResource("11_pres")
+escena_interior = "res://scenes/presidencia_interior.tscn"
 
 [node name="InteractionArea" type="Area2D" parent="PresidenciaMunicipal"]
 

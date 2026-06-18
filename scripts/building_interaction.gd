@@ -16,6 +16,12 @@ var _sprite_node: Sprite2D = null
 var player_nearby: bool = false
 var panel_open: bool = false
 
+# Escena interior (si está definida, E entra al edificio en lugar de abrir panel)
+@export var escena_interior: String = ""
+
+# Vibración de cámara al acercarse a la puerta
+var _ya_vibro: bool = false
+
 @onready var interaction_label: Label  = get_tree().current_scene.find_child("InteractionLabel", true, false)
 @onready var government_panel: Panel   = get_tree().current_scene.find_child("GovernmentPanel", true, false)
 @onready var info_label: Label         = get_tree().current_scene.find_child("GovernmentInfoLabel", true, false)
@@ -115,7 +121,13 @@ func _cb(btn: Button, accion: Callable, preview: String) -> void:
 
 func _process(_delta: float) -> void:
 	z_index = int(global_position.y)
+
 	if player_nearby and Input.is_action_just_pressed("interact"):
+		# Si hay escena interior definida → hacer transición
+		if escena_interior != "":
+			_entrar_edificio()
+			return
+
 		panel_open = !panel_open
 		if government_panel:
 			government_panel.visible = panel_open
@@ -125,6 +137,19 @@ func _process(_delta: float) -> void:
 			if interaction_label: interaction_label.visible = false
 		else:
 			_mostrar_hint()
+
+
+func _entrar_edificio() -> void:
+	# Vibrar cámara antes del fade
+	var camara: Camera2D = get_tree().get_first_node_in_group("player")
+	if camara:
+		var cam := camara.get_node_or_null("Camera2D")
+		if cam and cam.has_method("vibrar"):
+			cam.vibrar(0.5)
+	if has_node("/root/Transicion"):
+		get_node("/root/Transicion").ir_a_escena(escena_interior)
+	else:
+		get_tree().change_scene_to_file(escena_interior)
 
 
 func _configurar_botones_visibles() -> void:
@@ -206,8 +231,15 @@ func _mostrar_hint() -> void:
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		player_nearby = true
+		_ya_vibro = false
 		if not panel_open:
 			_mostrar_hint()
+		# Vibración sutil al acercarse
+		if not _ya_vibro:
+			_ya_vibro = true
+			var cam_node := body.get_node_or_null("Camera2D")
+			if cam_node and cam_node.has_method("vibrar"):
+				cam_node.vibrar(0.25)
 
 
 func _on_body_exited(body: Node2D) -> void:

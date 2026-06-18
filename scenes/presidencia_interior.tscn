@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://presidencia_interior"]
+
+[ext_resource type="Script" path="res://scripts/interior_base.gd" id="1_interior"]
+[ext_resource type="Script" path="res://scripts/player.gd.gd" id="2_player"]
+[ext_resource type="Script" path="res://scripts/player_sprite.gd" id="3_psprite"]
+[ext_resource type="Script" path="res://scripts/npc.gd" id="4_npc"]
+
+[sub_resource type="RectangleShape2D" id="Shape_player"]
+size = Vector2(16, 16)
+
+[sub_resource type="RectangleShape2D" id="Shape_salida"]
+size = Vector2(80, 32)
+
+[sub_resource type="RectangleShape2D" id="Shape_npc"]
+size = Vector2(20, 20)
+
+[node name="PresidenciaInterior" type="Node2D"]
+script = ExtResource("1_interior")
+escena_exterior = "res://main.tscn"
+posicion_salida = Vector2(0, 288)
+
+[node name="Fondo" type="Node2D" parent="."]
+
+[node name="Player" type="CharacterBody2D" parent="." groups=["player"]]
+position = Vector2(320, 500)
+script = ExtResource("2_player")
+
+[node name="PlayerSprite" type="Node2D" parent="Player"]
+script = ExtResource("3_psprite")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("Shape_player")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(2.0, 2.0)
+
+[node name="ZonaSalida" type="Area2D" parent="."]
+position = Vector2(320, 560)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ZonaSalida"]
+shape = SubResource("Shape_salida")
+
+[node name="SecretarioNPC" type="CharacterBody2D" parent="."]
+position = Vector2(320, 360)
+script = ExtResource("4_npc")
+nombre_npc = "Secretario Municipal"
+dialogos = ["Bienvenido a la Presidencia Municipal.", "Aquí gestionamos el presupuesto del municipio.", "¿En qué le podemos ayudar?"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SecretarioNPC"]
+shape = SubResource("Shape_npc")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="LabelSalida" type="Label" parent="UI"]
+visible = false
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 60.0
+text = "Presiona E para salir"

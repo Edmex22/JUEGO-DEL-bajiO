@@ -2,6 +2,9 @@ extends Node
 
 signal dia_avanzado(dia: int)
 
+# Posición donde el jugador debe aparecer al regresar del interior
+var posicion_jugador_exterior: Vector2 = Vector2(0, 288)
+
 var municipio_nombre: String = "San Brasa del Monte"
 var dia_actual: int = 1
 

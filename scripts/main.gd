@@ -13,6 +13,15 @@ func _ready() -> void:
 	_init_edificio($Hospital,             4, "Hospital General")
 	_init_edificio($Banco,                5, "Banco Municipal")
 
+	# Reposicionar jugador si viene de un interior
+	var jugador := $Player
+	if jugador and GameState.posicion_jugador_exterior != Vector2.ZERO:
+		jugador.position = GameState.posicion_jugador_exterior
+
+	# Fade in al cargar la escena principal
+	if has_node("/root/Transicion"):
+		get_node("/root/Transicion").fade_in()
+
 
 func _init_edificio(nodo: Node2D, tipo: int, nombre: String) -> void:
 	if nodo == null:
