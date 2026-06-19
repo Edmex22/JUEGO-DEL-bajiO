@@ -187,7 +187,7 @@ func _tex_cantera(tam: Vector2, color_claro: Color, color_oscuro: Color, tile_px
 
 func _tex_madera(tam: Vector2, color_base: Color) -> ImageTexture:
 	var image := Image.create(int(tam.x), int(tam.y), false, Image.FORMAT_RGBA8)
-	var ramp := [
+	var ramp: Array[Color] = [
 		color_base.darkened(0.35),
 		color_base.darkened(0.20),
 		color_base.darkened(0.08),
@@ -206,7 +206,7 @@ func _tex_madera(tam: Vector2, color_base: Color) -> ImageTexture:
 				image.set_pixel(x, y, color_base.darkened(0.25))
 			else:
 				var base_idx := (plank * 3 + x / 16) % ramp.size()
-				var c := ramp[base_idx]
+				var c: Color = ramp[base_idx]
 				var veta := (x * 5 + plank * 37 + ry * 2) % 29
 				if veta < 2:
 					c = c.darkened(0.20)
@@ -409,7 +409,7 @@ func _sofa(pos: Vector2, color: Color = Color("#8B5E3C")) -> void:
 func _estante_libros(pos: Vector2, filas: int = 3) -> void:
 	_rect(pos, Vector2(80, filas * 36 + 8), Color("#5C3D1E"))
 	_rect(pos + Vector2(0, filas * 36 + 4), Vector2(80, 4), Color("#3A2010"))
-	var colores := [Color("#1A3A6A"), Color("#6A1A1A"), Color("#1A5A1A"),
+	var colores: Array[Color] = [Color("#1A3A6A"), Color("#6A1A1A"), Color("#1A5A1A"),
 					Color("#5A4A1A"), Color("#3A1A5A"), Color("#6A4A1A")]
 	for ry in range(filas):
 		_rect(pos + Vector2(2, 4 + ry * 36), Vector2(76, 4), Color("#3A2010"))
