@@ -120,3 +120,114 @@ func _bandera(pos: Vector2) -> void:
 	_rect(pos + Vector2(3, 0),  Vector2(13, 30), Color("#006847"))
 	_rect(pos + Vector2(16, 0), Vector2(13, 30), Color("#FFFFFF"))
 	_rect(pos + Vector2(29, 0), Vector2(13, 30), Color("#CE1126"))
+
+
+func _lampara(pos: Vector2) -> void:
+	# Cuerpo de la lámpara colgante
+	_rect(pos + Vector2(10, 0), Vector2(4, 14), Color("#888888"))
+	_rect(pos, Vector2(24, 12), Color("#DDCC88"))
+	_rect(pos + Vector2(2, 2), Vector2(20, 8), Color("#FFEE99"))
+	# Halo de luz en el piso (debajo de la lámpara)
+	var halo_pos := Vector2(pos.x - 20, pos.y + 60)
+	_rect(halo_pos, Vector2(64, 24), Color(1.0, 0.97, 0.8, 0.15))
+
+
+func _alfombra(pos: Vector2, tam: Vector2, color: Color) -> void:
+	_rect(pos, tam, color.darkened(0.3))
+	_rect(pos + Vector2(4, 4), tam - Vector2(8, 8), color)
+	_rect(pos + Vector2(8, 8), tam - Vector2(16, 16), color.lightened(0.1))
+	# Borde decorativo
+	_rect(pos + Vector2(4, 4), Vector2(tam.x - 8, 3), color.darkened(0.2))
+	_rect(pos + Vector2(4, tam.y - 7), Vector2(tam.x - 8, 3), color.darkened(0.2))
+
+
+func _sofa(pos: Vector2, color: Color = Color("#8B5E3C")) -> void:
+	# Base
+	_rect(pos, Vector2(96, 40), color.darkened(0.3))
+	# Asiento
+	_rect(pos + Vector2(4, 4), Vector2(88, 28), color)
+	# Respaldo
+	_rect(pos + Vector2(0, -22), Vector2(96, 24), color.darkened(0.1))
+	# Brazos
+	_rect(pos + Vector2(0, -22), Vector2(12, 62), color.darkened(0.2))
+	_rect(pos + Vector2(84, -22), Vector2(12, 62), color.darkened(0.2))
+	# Cojines
+	_rect(pos + Vector2(14, -18), Vector2(28, 18), color.lightened(0.1))
+	_rect(pos + Vector2(54, -18), Vector2(28, 18), color.lightened(0.1))
+
+
+func _estante_libros(pos: Vector2, filas: int = 3) -> void:
+	_rect(pos, Vector2(80, filas * 36 + 8), Color("#5C3D1E"))
+	_rect(pos + Vector2(0, filas * 36 + 4), Vector2(80, 4), Color("#3A2010"))
+	var colores := [Color("#1A3A6A"), Color("#6A1A1A"), Color("#1A5A1A"),
+					Color("#5A4A1A"), Color("#3A1A5A"), Color("#6A4A1A")]
+	for ry in range(filas):
+		_rect(pos + Vector2(2, 4 + ry * 36), Vector2(76, 4), Color("#3A2010"))
+		var x := 4
+		var ci := 0
+		while x < 74:
+			var w := 6 + (ci % 3) * 3
+			_rect(pos + Vector2(x, 8 + ry * 36), Vector2(w, 26), colores[(ry * 4 + ci) % colores.size()])
+			x += w + 2
+			ci += 1
+
+
+func _cuadro_enmarcado(pos: Vector2, tam: Vector2, color_marco: Color, color_interior: Color, texto: String = "") -> void:
+	# Sombra
+	_rect(pos + Vector2(3, 3), tam + Vector2(4, 4), Color(0, 0, 0, 0.3))
+	# Marco
+	_rect(pos, tam + Vector2(4, 4), color_marco)
+	_rect(pos + Vector2(4, 4), tam - Vector2(4, 4), color_interior)
+	if texto != "":
+		_label(texto, pos + Vector2(6, 6), 7, color_marco.lightened(0.6))
+
+
+func _planta_grande(pos: Vector2) -> void:
+	# Maceta grande
+	_rect(pos + Vector2(6, 36), Vector2(28, 30), Color("#964B00"))
+	_rect(pos + Vector2(4, 32), Vector2(32, 8), Color("#7A3A00"))
+	# Tallo
+	_rect(pos + Vector2(18, 12), Vector2(4, 26), Color("#2D6A20"))
+	# Hojas
+	_rect(pos, Vector2(40, 20), Color("#2ECC71"))
+	_rect(pos + Vector2(4, -14), Vector2(32, 18), Color("#27AE60"))
+	_rect(pos + Vector2(-8, 8), Vector2(20, 14), Color("#2ECC71"))
+	_rect(pos + Vector2(28, 8), Vector2(20, 14), Color("#2ECC71"))
+	_rect(pos + Vector2(8, -24), Vector2(24, 14), Color("#58D68D"))
+
+
+func _columna(pos: Vector2, alto_col: int = 120) -> void:
+	_rect(pos, Vector2(20, alto_col), Color("#D4C8A0"))
+	_rect(pos + Vector2(2, 0), Vector2(16, alto_col), Color("#E8DDB8"))
+	_rect(pos + Vector2(0, 0), Vector2(20, 10), Color("#C0B490"))
+	_rect(pos + Vector2(0, alto_col - 10), Vector2(20, 10), Color("#C0B490"))
+
+
+func _cama_hospital(pos: Vector2) -> void:
+	# Marco metálico
+	_rect(pos, Vector2(80, 44), Color("#A0A0A0"))
+	_rect(pos + Vector2(2, 2), Vector2(76, 40), Color("#C0C0C0"))
+	# Colchón
+	_rect(pos + Vector2(4, 4), Vector2(72, 32), Color("#FFFFFF"))
+	# Sábana
+	_rect(pos + Vector2(4, 4), Vector2(72, 22), Color("#E8F4FD"))
+	# Almohada
+	_rect(pos + Vector2(6, 6), Vector2(22, 16), Color("#F0F0F0"))
+	# Cabecera
+	_rect(pos + Vector2(0, -10), Vector2(80, 12), Color("#888888"))
+	# Ruedas
+	_rect(pos + Vector2(4,  40), Vector2(8, 6), Color("#666666"))
+	_rect(pos + Vector2(68, 40), Vector2(8, 6), Color("#666666"))
+
+
+func _mostrador(pos: Vector2, ancho_m: int, color: Color = Color("#8B6914")) -> void:
+	# Sombra
+	_rect(pos + Vector2(2, 4), Vector2(ancho_m, 56), Color(0, 0, 0, 0.2))
+	# Lateral oscuro (profundidad)
+	_rect(pos + Vector2(0, 48), Vector2(ancho_m, 8), color.darkened(0.4))
+	# Frente del mostrador
+	_rect(pos, Vector2(ancho_m, 48), color.darkened(0.15))
+	# Borde superior
+	_rect(pos + Vector2(0, -10), Vector2(ancho_m, 12), color.lightened(0.1))
+	# Línea decorativa
+	_rect(pos + Vector2(0, -2), Vector2(ancho_m, 3), color.lightened(0.3))
