@@ -40,13 +40,17 @@ func _dibujar_fondo() -> void:
 # ── Arquitectura ─────────────────────────────────────────────────────────────
 
 func _piso() -> void:
-	# Cantera en damero con grout — pixel art texture tileada
-	_tex_rect(Vector2.ZERO, Vector2(ancho, alto), _tex_cantera(Vector2(48, 48), Color("#CBBFA8"), Color("#D8CCB4"), 48))
+	for fy in range(0, alto, 48):
+		for fx in range(0, ancho, 48):
+			var c := Color("#CBBFA8") if ((fx / 48 + fy / 48) % 2 == 0) else Color("#D8CCB4")
+			_rect(Vector2(fx, fy), Vector2(48, 48), c)
+			_rect(Vector2(fx, fy), Vector2(48, 2), Color("#B0A488"))
+			_rect(Vector2(fx, fy), Vector2(2, 48), Color("#B0A488"))
 
 
 func _muros() -> void:
 	# Pared norte con moldura dorada — pixel art texture
-	_tex_rect(Vector2(0, 0), Vector2(ancho, 72), _tex_muro(Vector2(ancho, 72), Color("#EAE0CC")))
+	_rect(Vector2(0, 0), Vector2(ancho, 72), Color("#EAE0CC"))
 	_rect(Vector2(0, 64), Vector2(ancho, 5), Color("#C8A860"))
 	_rect(Vector2(0, 69), Vector2(ancho, 3), Color("#8B7340"))
 	# Zoclos laterales
@@ -135,7 +139,7 @@ func _mostrador_recepcion() -> void:
 func _sala_de_espera() -> void:
 	# Alfombra de espera a la izquierda, sin columnas encima
 	_sombra(Vector2(30, 296), Vector2(244, 150))
-	_tex_rect(Vector2(30, 296), Vector2(244, 150), _tex_alfombra(Vector2(244, 150), Color("#8B1A1A")))
+	_alfombra(Vector2(30, 296), Vector2(244, 150), Color("#8B1A1A"))
 	# Borde decorativo encima de la textura
 	_rect(Vector2(30, 296), Vector2(244, 4), Color("#8B1A1A").darkened(0.3))
 	_rect(Vector2(30, 442), Vector2(244, 4), Color("#8B1A1A").darkened(0.3))
