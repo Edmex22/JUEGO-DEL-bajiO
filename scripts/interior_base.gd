@@ -234,7 +234,7 @@ func _tex_muro(tam: Vector2, color_base: Color) -> ImageTexture:
 	var w := int(tam.x)
 	for y in range(h):
 		var t := float(y) / float(h)
-		# Gradiente top→bottom: hasta 18% más claro arriba (luz de techo), 12% más oscuro abajo
+		# Gradiente top->bottom: hasta 18% más claro arriba (luz de techo), 12% más oscuro abajo
 		var row_color := color_base.lightened(0.18 * (1.0 - t)).darkened(0.12 * t)
 		for x in range(w):
 			var c := row_color
@@ -376,7 +376,7 @@ func _lampara(pos: Vector2) -> void:
 	_rect(pos + Vector2(2, 2), Vector2(20, 7), Color("#FFEE99"))
 	# Foco encendido (núcleo brillante)
 	_rect(pos + Vector2(8, 7), Vector2(8, 4), Color("#FFFBDC"))
-	# Cono de luz en capas: amplio y tenue → estrecho e intenso
+	# Cono de luz en capas: amplio y tenue -> estrecho e intenso
 	_rect(Vector2(pos.x - 26, pos.y + 14), Vector2(76, 66), Color(1.0, 0.95, 0.72, 0.05))
 	_rect(Vector2(pos.x - 18, pos.y + 14), Vector2(60, 58), Color(1.0, 0.96, 0.75, 0.06))
 	_rect(Vector2(pos.x - 8,  pos.y + 14), Vector2(40, 50), Color(1.0, 0.97, 0.80, 0.07))
