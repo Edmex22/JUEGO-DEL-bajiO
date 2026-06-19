@@ -266,51 +266,43 @@ func _tex_alfombra(tam: Vector2, color_base: Color) -> ImageTexture:
 	var image := Image.create(int(tam.x), int(tam.y), false, Image.FORMAT_RGBA8)
 	var w := int(tam.x)
 	var h := int(tam.y)
-	# Paleta de 5 tonos
-	var c_borde    := color_base.darkened(0.45)
-	var c_franja   := color_base.darkened(0.28)
-	var c_patron   := color_base.darkened(0.20)
-	var c_base     := color_base
+	var c_borde     := color_base.darkened(0.45)
+	var c_franja    := color_base.darkened(0.28)
+	var c_patron    := color_base.darkened(0.20)
+	var c_base      := color_base
 	var c_highlight := color_base.lightened(0.18)
-	var c_centro   := color_base.lightened(0.10)
+	var c_centro    := color_base.lightened(0.10)
 	for y in range(h):
 		for x in range(w):
-			# Flecos/borde exterior grueso: 4px muy oscuro + 4px franja
+			var c := c_base
 			if x < 2 or x >= w - 2 or y < 2 or y >= h - 2:
-				image.set_pixel(x, y, c_borde)
-				continue
-			if x < 6 or x >= w - 6 or y < 6 or y >= h - 6:
-				image.set_pixel(x, y, c_franja)
-				continue
-			# Patrón de rombos cada 12px (más pronunciado)
-			var dx := x % 12
-			var dy := y % 12
-			var manhattan := abs(dx - 6) + abs(dy - 6)
-			var c: Color
-			if manhattan == 0:
-				# Centro del rombo — punto brillante
-				c = c_highlight
-			elif manhattan <= 2:
-				c = c_patron.lightened(0.08)
-			elif manhattan == 6:
-				# Borde del rombo
-				c = c_patron
-			elif manhattan == 7:
-				c = c_patron.darkened(0.08)
+				c = c_borde
+			elif x < 6 or x >= w - 6 or y < 6 or y >= h - 6:
+				c = c_franja
 			else:
-				# Interior suave con highlight central en toda la alfombra
-				var cx := abs(x - w / 2)
-				var cy := abs(y - h / 2)
-				if cx < w / 5 and cy < h / 5:
-					c = c_centro
+				var dx := x % 12
+				var dy := y % 12
+				var manhattan := abs(dx - 6) + abs(dy - 6)
+				if manhattan == 0:
+					c = c_highlight
+				elif manhattan <= 2:
+					c = c_patron.lightened(0.08)
+				elif manhattan == 6:
+					c = c_patron
+				elif manhattan == 7:
+					c = c_patron.darkened(0.08)
 				else:
-					c = c_base
-			# Grain de tela (fibras)
-			var fibra := (x * 7 + y * 3) % 13
-			if fibra == 0:
-				c = c.darkened(0.10)
-			elif fibra == 1:
-				c = c.lightened(0.06)
+					var cx := abs(x - w / 2)
+					var cy := abs(y - h / 2)
+					if cx < w / 5 and cy < h / 5:
+						c = c_centro
+					else:
+						c = c_base
+				var fibra := (x * 7 + y * 3) % 13
+				if fibra == 0:
+					c = c.darkened(0.10)
+				elif fibra == 1:
+					c = c.lightened(0.06)
 			image.set_pixel(x, y, c)
 	return ImageTexture.create_from_image(image)
 
