@@ -5,7 +5,7 @@ func _dibujar_fondo() -> void:
 	for fy in range(0, alto, 28):
 		for fx in range(0, ancho, 28):
 			var idx := (fx / 28 + fy / 28) % 3
-			var c := [Color("#5EAA40"), Color("#68B848"), Color("#62B244")][idx]
+			var c: Color = [Color("#5EAA40"), Color("#68B848"), Color("#62B244")][idx]
 			_rect(Vector2(fx, fy), Vector2(28, 28), c)
 
 	# Bardas con diseño
