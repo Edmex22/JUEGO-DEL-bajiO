@@ -143,54 +143,95 @@ func _tex_rect(pos: Vector2, size: Vector2, texture: ImageTexture) -> void:
 
 func _tex_cantera(tam: Vector2, color_claro: Color, color_oscuro: Color, tile_px: int) -> ImageTexture:
 	var image := Image.create(int(tam.x), int(tam.y), false, Image.FORMAT_RGBA8)
-	var grout := Color("#B0A490")
+	var grout       := Color("#9A9080")
+	var grout_inner := Color("#A8A090")
 	for y in range(int(tam.y)):
 		for x in range(int(tam.x)):
 			var tx := x % tile_px
 			var ty := y % tile_px
 			var tile_col := (x / tile_px + y / tile_px) % 2
 			var base := color_claro if tile_col == 0 else color_oscuro
-			# Grout lines: 2px border on top and left of each tile
-			if tx < 2 or ty < 2:
+			# Grout: 3px borde externo oscuro + 1px borde interno medio
+			if tx < 1 or ty < 1:
 				image.set_pixel(x, y, grout)
+			elif tx < 3 or ty < 3:
+				image.set_pixel(x, y, grout_inner)
 			else:
-				# Grain: deterministic pseudo-random darkening
-				var noise := (x * 7 + y * 13) % 17
-				if noise < 3:
-					image.set_pixel(x, y, base.darkened(0.07 + noise * 0.02))
-				elif noise == 3:
-					image.set_pixel(x, y, base.lightened(0.05))
-				else:
-					image.set_pixel(x, y, base)
+				# Rampa de 5 tonos para simular piedra natural + grain fuerte
+				var n1 := (x * 7  + y * 13) % 23
+				var n2 := (x * 17 + y * 5)  % 11
+				var c := base
+				# Vetas de piedra (líneas diagonales sutiles)
+				var veta := (x + y * 2) % 14
+				if veta == 0:
+					c = base.darkened(0.22)
+				elif veta == 1:
+					c = base.darkened(0.12)
+				elif veta == 13:
+					c = base.lightened(0.12)
+				# Grain encima de las vetas
+				if n1 < 2:
+					c = c.darkened(0.18)
+				elif n1 < 4:
+					c = c.darkened(0.09)
+				elif n1 == 4:
+					c = c.lightened(0.14)
+				elif n1 == 5:
+					c = c.lightened(0.07)
+				# Píxeles de polvo/impureza (muy puntuales)
+				if n2 == 0:
+					c = c.darkened(0.28)
+				image.set_pixel(x, y, c)
 	return ImageTexture.create_from_image(image)
 
 
 func _tex_madera(tam: Vector2, color_base: Color) -> ImageTexture:
 	var image := Image.create(int(tam.x), int(tam.y), false, Image.FORMAT_RGBA8)
 	var ramp := [
-		color_base.darkened(0.30),
-		color_base.darkened(0.15),
+		color_base.darkened(0.35),
+		color_base.darkened(0.20),
+		color_base.darkened(0.08),
 		color_base,
-		color_base.lightened(0.10),
-		color_base.lightened(0.22),
+		color_base.lightened(0.12),
+		color_base.lightened(0.26),
 	]
 	var plank_h := 20
 	for y in range(int(tam.y)):
 		var plank := y / plank_h
-		# Plank separator line
-		if y % plank_h == 0:
+		var ry := y % plank_h
+		# Línea separadora de tablón — 2px con degradado
+		if ry == 0:
 			for x in range(int(tam.x)):
-				image.set_pixel(x, y, color_base.darkened(0.35))
+				image.set_pixel(x, y, color_base.darkened(0.45))
+			continue
+		if ry == 1:
+			for x in range(int(tam.x)):
+				image.set_pixel(x, y, color_base.darkened(0.25))
 			continue
 		for x in range(int(tam.x)):
-			var tone_idx := (x * 3 + plank * 5) % ramp.size()
-			var c := ramp[tone_idx]
-			# Grain pixels
-			var noise := (x * 11 + y * 7 + plank * 3) % 19
-			if noise == 0:
-				c = c.darkened(0.12)
-			elif noise == 1:
-				c = c.lightened(0.08)
+			# Tono base varía por tablón (cada tablón tiene carácter propio)
+			var base_idx := (plank * 3 + x / 16) % ramp.size()
+			var c := ramp[base_idx]
+			# Veta de madera horizontal (sinusoide aproximada con enteros)
+			var veta := (x * 5 + plank * 37 + ry * 2) % 29
+			if veta < 2:
+				c = c.darkened(0.20)
+			elif veta < 4:
+				c = c.darkened(0.10)
+			elif veta == 4:
+				c = c.lightened(0.18)
+			# Nudos (puntos únicos de alta oscuridad)
+			var nudo := (x * 13 + plank * 97) % 211
+			if nudo == 0:
+				c = color_base.darkened(0.55)
+			elif nudo == 1:
+				c = color_base.darkened(0.35)
+			# Grain fino
+			var grain := (x * 11 + y * 7 + plank * 3) % 19
+			if grain == 0:
+				c = c.darkened(0.14)
+			elif grain == 1:
+				c = c.lightened(0.10)
 			image.set_pixel(x, y, c)
 	return ImageTexture.create_from_image(image)
 
@@ -200,17 +241,31 @@ func _tex_muro(tam: Vector2, color_base: Color) -> ImageTexture:
 	var h := int(tam.y)
 	var w := int(tam.x)
 	for y in range(h):
-		# Gradient: lighter at top (lit from above), darker at bottom
 		var t := float(y) / float(h)
-		var row_color := color_base.lightened(0.12 * (1.0 - t)).darkened(0.08 * t)
+		# Gradiente top→bottom: hasta 18% más claro arriba (luz de techo), 12% más oscuro abajo
+		var row_color := color_base.lightened(0.18 * (1.0 - t)).darkened(0.12 * t)
 		for x in range(w):
-			# Subtle vertical striping
-			var stripe := (x * 3 + y * 2) % 23
 			var c := row_color
-			if stripe < 2:
-				c = c.darkened(0.03)
-			elif stripe == 2:
-				c = c.lightened(0.02)
+			# Textura de yeso: estriado vertical muy fino (poros del estuco)
+			var estuco := (x * 3 + y * 2) % 31
+			if estuco < 1:
+				c = c.darkened(0.08)
+			elif estuco < 3:
+				c = c.darkened(0.04)
+			elif estuco == 3:
+				c = c.lightened(0.06)
+			# Imperfecciones de pintura (manchas muy suaves)
+			var mancha := (x * 19 + y * 11) % 97
+			if mancha == 0:
+				c = c.darkened(0.12)
+			elif mancha == 1:
+				c = c.darkened(0.06)
+			elif mancha == 2:
+				c = c.lightened(0.08)
+			# Oclusión en esquinas laterales
+			var ao_x := minf(float(x), float(w - x)) / float(w) * 8.0
+			if ao_x < 1.0:
+				c = c.darkened(0.10 * (1.0 - ao_x))
 			image.set_pixel(x, y, c)
 	return ImageTexture.create_from_image(image)
 
@@ -219,30 +274,51 @@ func _tex_alfombra(tam: Vector2, color_base: Color) -> ImageTexture:
 	var image := Image.create(int(tam.x), int(tam.y), false, Image.FORMAT_RGBA8)
 	var w := int(tam.x)
 	var h := int(tam.y)
-	var border := 2
-	var dark_border := color_base.darkened(0.30)
-	var lighter := color_base.lightened(0.10)
-	var diamond_color := color_base.darkened(0.18)
+	# Paleta de 5 tonos
+	var c_borde    := color_base.darkened(0.45)
+	var c_franja   := color_base.darkened(0.28)
+	var c_patron   := color_base.darkened(0.20)
+	var c_base     := color_base
+	var c_highlight := color_base.lightened(0.18)
+	var c_centro   := color_base.lightened(0.10)
 	for y in range(h):
 		for x in range(w):
+			# Flecos/borde exterior grueso: 4px muy oscuro + 4px franja
+			if x < 2 or x >= w - 2 or y < 2 or y >= h - 2:
+				image.set_pixel(x, y, c_borde)
+				continue
+			if x < 6 or x >= w - 6 or y < 6 or y >= h - 6:
+				image.set_pixel(x, y, c_franja)
+				continue
+			# Patrón de rombos cada 12px (más pronunciado)
+			var dx := x % 12
+			var dy := y % 12
+			var manhattan := abs(dx - 6) + abs(dy - 6)
 			var c: Color
-			if x < border or x >= w - border or y < border or y >= h - border:
-				c = dark_border
+			if manhattan == 0:
+				# Centro del rombo — punto brillante
+				c = c_highlight
+			elif manhattan <= 2:
+				c = c_patron.lightened(0.08)
+			elif manhattan == 6:
+				# Borde del rombo
+				c = c_patron
+			elif manhattan == 7:
+				c = c_patron.darkened(0.08)
 			else:
-				# Center highlight
+				# Interior suave con highlight central en toda la alfombra
 				var cx := abs(x - w / 2)
 				var cy := abs(y - h / 2)
-				var in_center := cx < w / 4 and cy < h / 4
-				# Diamond pattern every 8px
-				var dx := x % 8
-				var dy := y % 8
-				var on_diamond := (dx + dy == 4) or (dx == dy and dx == 4)
-				if on_diamond:
-					c = diamond_color
-				elif in_center:
-					c = lighter
+				if cx < w / 5 and cy < h / 5:
+					c = c_centro
 				else:
-					c = color_base
+					c = c_base
+			# Grain de tela (fibras)
+			var fibra := (x * 7 + y * 3) % 13
+			if fibra == 0:
+				c = c.darkened(0.10)
+			elif fibra == 1:
+				c = c.lightened(0.06)
 			image.set_pixel(x, y, c)
 	return ImageTexture.create_from_image(image)
 
