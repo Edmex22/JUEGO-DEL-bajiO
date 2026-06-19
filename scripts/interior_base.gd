@@ -28,6 +28,7 @@ func _ready() -> void:
 		_zona_salida.body_exited.connect(_on_salida_exited)
 
 	_dibujar_fondo()
+	_aplicar_ambiente()
 	_agregar_paredes()
 
 	if has_node("/root/Transicion"):
@@ -88,7 +89,39 @@ func _colision(pos: Vector2, tam: Vector2) -> void:
 
 
 func _sombra(pos: Vector2, tam: Vector2, desplazamiento: Vector2 = Vector2(4, 6)) -> void:
-	_rect(pos + desplazamiento, tam, Color(0, 0, 0, 0.22))
+	# Sombra suave en dos capas (penumbra + núcleo) con dirección de luz coherente
+	_rect(pos + desplazamiento + Vector2(3, 3), tam + Vector2(4, 4), Color(0, 0, 0, 0.08))
+	_rect(pos + desplazamiento + Vector2(1, 1), tam + Vector2(2, 2), Color(0, 0, 0, 0.12))
+	_rect(pos + desplazamiento, tam, Color(0, 0, 0, 0.20))
+
+
+func _bisel(pos: Vector2, tam: Vector2, color: Color, fuerza: float = 0.20) -> void:
+	# Volumen 3/4: luz arriba-izquierda, sombra abajo-derecha (luz desde el norte)
+	_rect(pos, tam, color)
+	_rect(pos, Vector2(tam.x, 2), color.lightened(fuerza))
+	_rect(pos, Vector2(2, tam.y), color.lightened(fuerza * 0.6))
+	_rect(pos + Vector2(0, tam.y - 2), Vector2(tam.x, 2), color.darkened(fuerza))
+	_rect(pos + Vector2(tam.x - 2, 0), Vector2(2, tam.y), color.darkened(fuerza * 0.6))
+
+
+func _aplicar_ambiente() -> void:
+	# Capa de iluminación ambiental aplicada SOBRE el fondo (queda bajo el jugador).
+	# 1) Tinte cálido global para cohesión cromática (golden-hour muy sutil)
+	_rect(Vector2.ZERO, Vector2(ancho, alto), Color(1.0, 0.86, 0.55, 0.05))
+	# 2) Oclusión ambiental en la unión muro norte / piso
+	_rect(Vector2(0, 72), Vector2(ancho, 10), Color(0, 0, 0, 0.10))
+	_rect(Vector2(0, 72), Vector2(ancho, 5),  Color(0, 0, 0, 0.08))
+	# 3) Viñeta suave: oscurece ~42px desde cada borde para encerrar la escena
+	var pasos := 6
+	var grosor := 7
+	for i in range(pasos):
+		var a := (pasos - i) / float(pasos) * 0.075
+		var c := Color(0, 0, 0, a)
+		var d := i * grosor
+		_rect(Vector2(0, d), Vector2(ancho, grosor), c)
+		_rect(Vector2(0, alto - d - grosor), Vector2(ancho, grosor), c)
+		_rect(Vector2(d, 0), Vector2(grosor, alto), c)
+		_rect(Vector2(ancho - d - grosor, 0), Vector2(grosor, alto), c)
 
 
 func _rect(pos: Vector2, size: Vector2, color: Color) -> void:
@@ -137,9 +170,14 @@ func _escritorio(pos: Vector2) -> void:
 
 
 func _silla(pos: Vector2) -> void:
-	_rect(pos, Vector2(32, 32), Color("#8B7355"))
+	# Sombra de contacto en el piso
+	_rect(pos + Vector2(2, 28), Vector2(32, 8), Color(0, 0, 0, 0.14))
+	# Respaldo con volumen
+	_bisel(pos + Vector2(0, -18), Vector2(32, 20), Color("#8B7355"))
+	# Asiento con volumen y cojín
+	_bisel(pos, Vector2(32, 32), Color("#8B7355"))
 	_rect(pos + Vector2(3, 3), Vector2(26, 26), Color("#A08060"))
-	_rect(pos + Vector2(0, -18), Vector2(32, 20), Color("#8B7355"))
+	_rect(pos + Vector2(5, 5), Vector2(22, 10), Color("#B0906E"))
 
 
 func _maceta(pos: Vector2) -> void:
@@ -156,13 +194,17 @@ func _bandera(pos: Vector2) -> void:
 
 
 func _lampara(pos: Vector2) -> void:
-	# Cuerpo de la lámpara colgante
-	_rect(pos + Vector2(10, 0), Vector2(4, 14), Color("#888888"))
-	_rect(pos, Vector2(24, 12), Color("#DDCC88"))
-	_rect(pos + Vector2(2, 2), Vector2(20, 8), Color("#FFEE99"))
-	# Halo de luz en el piso (debajo de la lámpara)
-	var halo_pos := Vector2(pos.x - 20, pos.y + 60)
-	_rect(halo_pos, Vector2(64, 24), Color(1.0, 0.97, 0.8, 0.15))
+	# Cable y casquillo
+	_rect(pos + Vector2(11, 0), Vector2(2, 14), Color("#666666"))
+	# Pantalla con bisel metálico
+	_bisel(pos, Vector2(24, 12), Color("#C8B878"), 0.25)
+	_rect(pos + Vector2(2, 2), Vector2(20, 7), Color("#FFEE99"))
+	# Foco encendido (núcleo brillante)
+	_rect(pos + Vector2(8, 7), Vector2(8, 4), Color("#FFFBDC"))
+	# Cono de luz en capas: amplio y tenue → estrecho e intenso
+	_rect(Vector2(pos.x - 26, pos.y + 14), Vector2(76, 66), Color(1.0, 0.95, 0.72, 0.05))
+	_rect(Vector2(pos.x - 18, pos.y + 14), Vector2(60, 58), Color(1.0, 0.96, 0.75, 0.06))
+	_rect(Vector2(pos.x - 8,  pos.y + 14), Vector2(40, 50), Color(1.0, 0.97, 0.80, 0.07))
 
 
 func _alfombra(pos: Vector2, tam: Vector2, color: Color) -> void:
@@ -208,13 +250,17 @@ func _estante_libros(pos: Vector2, filas: int = 3) -> void:
 func _cuadro_enmarcado(pos: Vector2, tam: Vector2, color_marco: Color, color_interior: Color, texto: String = "") -> void:
 	if tam.x == 0 and tam.y == 0:
 		return
-	# Sombra
-	_rect(pos + Vector2(3, 3), tam + Vector2(4, 4), Color(0, 0, 0, 0.3))
-	# Marco
-	_rect(pos, tam + Vector2(4, 4), color_marco)
-	_rect(pos + Vector2(4, 4), tam - Vector2(4, 4), color_interior)
+	# Sombra proyectada del cuadro sobre el muro
+	_sombra(pos, tam + Vector2(4, 4), Vector2(3, 4))
+	# Marco con bisel dorado (luz arriba-izquierda)
+	_bisel(pos, tam + Vector2(4, 4), color_marco, 0.28)
+	# Fondo interior con viñeta propia para dar profundidad al lienzo
+	_rect(pos + Vector2(4, 4), tam - Vector2(4, 4), color_interior.darkened(0.12))
+	_rect(pos + Vector2(6, 6), tam - Vector2(8, 8), color_interior)
+	# Reflejo de vidrio en la esquina superior
+	_rect(pos + Vector2(5, 5), Vector2((tam.x - 8) * 0.4, 3), Color(1, 1, 1, 0.10))
 	if texto != "":
-		_label(texto, pos + Vector2(6, 6), 8, color_marco.lightened(0.5), int(tam.x - 8))
+		_label(texto, pos + Vector2(7, 8), 8, color_marco.lightened(0.5), int(tam.x - 10))
 
 
 func _planta_grande(pos: Vector2) -> void:
