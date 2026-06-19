@@ -132,6 +132,121 @@ func _rect(pos: Vector2, size: Vector2, color: Color) -> void:
 	_fondo.add_child(r)
 
 
+func _tex_rect(pos: Vector2, size: Vector2, texture: ImageTexture) -> void:
+	var tr := TextureRect.new()
+	tr.position = pos
+	tr.size = size
+	tr.texture = texture
+	tr.stretch_mode = TextureRect.STRETCH_TILE
+	_fondo.add_child(tr)
+
+
+func _tex_cantera(tam: Vector2, color_claro: Color, color_oscuro: Color, tile_px: int) -> ImageTexture:
+	var image := Image.create(int(tam.x), int(tam.y), false, Image.FORMAT_RGBA8)
+	var grout := Color("#B0A490")
+	for y in range(int(tam.y)):
+		for x in range(int(tam.x)):
+			var tx := x % tile_px
+			var ty := y % tile_px
+			var tile_col := (x / tile_px + y / tile_px) % 2
+			var base := color_claro if tile_col == 0 else color_oscuro
+			# Grout lines: 2px border on top and left of each tile
+			if tx < 2 or ty < 2:
+				image.set_pixel(x, y, grout)
+			else:
+				# Grain: deterministic pseudo-random darkening
+				var noise := (x * 7 + y * 13) % 17
+				if noise < 3:
+					image.set_pixel(x, y, base.darkened(0.07 + noise * 0.02))
+				elif noise == 3:
+					image.set_pixel(x, y, base.lightened(0.05))
+				else:
+					image.set_pixel(x, y, base)
+	return ImageTexture.create_from_image(image)
+
+
+func _tex_madera(tam: Vector2, color_base: Color) -> ImageTexture:
+	var image := Image.create(int(tam.x), int(tam.y), false, Image.FORMAT_RGBA8)
+	var ramp := [
+		color_base.darkened(0.30),
+		color_base.darkened(0.15),
+		color_base,
+		color_base.lightened(0.10),
+		color_base.lightened(0.22),
+	]
+	var plank_h := 20
+	for y in range(int(tam.y)):
+		var plank := y / plank_h
+		# Plank separator line
+		if y % plank_h == 0:
+			for x in range(int(tam.x)):
+				image.set_pixel(x, y, color_base.darkened(0.35))
+			continue
+		for x in range(int(tam.x)):
+			var tone_idx := (x * 3 + plank * 5) % ramp.size()
+			var c := ramp[tone_idx]
+			# Grain pixels
+			var noise := (x * 11 + y * 7 + plank * 3) % 19
+			if noise == 0:
+				c = c.darkened(0.12)
+			elif noise == 1:
+				c = c.lightened(0.08)
+			image.set_pixel(x, y, c)
+	return ImageTexture.create_from_image(image)
+
+
+func _tex_muro(tam: Vector2, color_base: Color) -> ImageTexture:
+	var image := Image.create(int(tam.x), int(tam.y), false, Image.FORMAT_RGBA8)
+	var h := int(tam.y)
+	var w := int(tam.x)
+	for y in range(h):
+		# Gradient: lighter at top (lit from above), darker at bottom
+		var t := float(y) / float(h)
+		var row_color := color_base.lightened(0.12 * (1.0 - t)).darkened(0.08 * t)
+		for x in range(w):
+			# Subtle vertical striping
+			var stripe := (x * 3 + y * 2) % 23
+			var c := row_color
+			if stripe < 2:
+				c = c.darkened(0.03)
+			elif stripe == 2:
+				c = c.lightened(0.02)
+			image.set_pixel(x, y, c)
+	return ImageTexture.create_from_image(image)
+
+
+func _tex_alfombra(tam: Vector2, color_base: Color) -> ImageTexture:
+	var image := Image.create(int(tam.x), int(tam.y), false, Image.FORMAT_RGBA8)
+	var w := int(tam.x)
+	var h := int(tam.y)
+	var border := 2
+	var dark_border := color_base.darkened(0.30)
+	var lighter := color_base.lightened(0.10)
+	var diamond_color := color_base.darkened(0.18)
+	for y in range(h):
+		for x in range(w):
+			var c: Color
+			if x < border or x >= w - border or y < border or y >= h - border:
+				c = dark_border
+			else:
+				# Center highlight
+				var cx := abs(x - w / 2)
+				var cy := abs(y - h / 2)
+				var in_center := cx < w / 4 and cy < h / 4
+				# Diamond pattern every 8px
+				var dx := x % 8
+				var dy := y % 8
+				var on_diamond := (dx + dy == 4) or (dx == dy and dx == 4)
+				if on_diamond:
+					c = diamond_color
+				elif in_center:
+					c = lighter
+				else:
+					c = color_base
+			image.set_pixel(x, y, c)
+	return ImageTexture.create_from_image(image)
+
+
 func _label(texto: String, pos: Vector2, size: int = 10, color: Color = Color("#5A3A10"), ancho_max: int = 0) -> void:
 	var l := Label.new()
 	l.text = texto
