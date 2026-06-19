@@ -199,40 +199,32 @@ func _tex_madera(tam: Vector2, color_base: Color) -> ImageTexture:
 	for y in range(int(tam.y)):
 		var plank := y / plank_h
 		var ry := y % plank_h
-		# Línea separadora de tablón — 2px con degradado
-		if ry == 0:
-			for x in range(int(tam.x)):
-				image.set_pixel(x, y, color_base.darkened(0.45))
-			continue
-		if ry == 1:
-			for x in range(int(tam.x)):
-				image.set_pixel(x, y, color_base.darkened(0.25))
-			continue
 		for x in range(int(tam.x)):
-			# Tono base varía por tablón (cada tablón tiene carácter propio)
-			var base_idx := (plank * 3 + x / 16) % ramp.size()
-			var c := ramp[base_idx]
-			# Veta de madera horizontal (sinusoide aproximada con enteros)
-			var veta := (x * 5 + plank * 37 + ry * 2) % 29
-			if veta < 2:
-				c = c.darkened(0.20)
-			elif veta < 4:
-				c = c.darkened(0.10)
-			elif veta == 4:
-				c = c.lightened(0.18)
-			# Nudos (puntos únicos de alta oscuridad)
-			var nudo := (x * 13 + plank * 97) % 211
-			if nudo == 0:
-				c = color_base.darkened(0.55)
-			elif nudo == 1:
-				c = color_base.darkened(0.35)
-			# Grain fino
-			var grain := (x * 11 + y * 7 + plank * 3) % 19
-			if grain == 0:
-				c = c.darkened(0.14)
-			elif grain == 1:
-				c = c.lightened(0.10)
-			image.set_pixel(x, y, c)
+			if ry == 0:
+				image.set_pixel(x, y, color_base.darkened(0.45))
+			elif ry == 1:
+				image.set_pixel(x, y, color_base.darkened(0.25))
+			else:
+				var base_idx := (plank * 3 + x / 16) % ramp.size()
+				var c := ramp[base_idx]
+				var veta := (x * 5 + plank * 37 + ry * 2) % 29
+				if veta < 2:
+					c = c.darkened(0.20)
+				elif veta < 4:
+					c = c.darkened(0.10)
+				elif veta == 4:
+					c = c.lightened(0.18)
+				var nudo := (x * 13 + plank * 97) % 211
+				if nudo == 0:
+					c = color_base.darkened(0.55)
+				elif nudo == 1:
+					c = color_base.darkened(0.35)
+				var grain := (x * 11 + y * 7 + plank * 3) % 19
+				if grain == 0:
+					c = c.darkened(0.14)
+				elif grain == 1:
+					c = c.lightened(0.10)
+				image.set_pixel(x, y, c)
 	return ImageTexture.create_from_image(image)
 
 
@@ -263,7 +255,7 @@ func _tex_muro(tam: Vector2, color_base: Color) -> ImageTexture:
 			elif mancha == 2:
 				c = c.lightened(0.08)
 			# Oclusión en esquinas laterales
-			var ao_x := minf(float(x), float(w - x)) / float(w) * 8.0
+			var ao_x := min(float(x), float(w - x)) / float(w) * 8.0
 			if ao_x < 1.0:
 				c = c.darkened(0.10 * (1.0 - ao_x))
 			image.set_pixel(x, y, c)
