@@ -99,12 +99,16 @@ func _rect(pos: Vector2, size: Vector2, color: Color) -> void:
 	_fondo.add_child(r)
 
 
-func _label(texto: String, pos: Vector2, size: int = 10, color: Color = Color("#5A3A10")) -> void:
+func _label(texto: String, pos: Vector2, size: int = 10, color: Color = Color("#5A3A10"), ancho_max: int = 0) -> void:
 	var l := Label.new()
 	l.text = texto
 	l.position = pos
 	l.add_theme_font_size_override("font_size", size)
 	l.add_theme_color_override("font_color", color)
+	if ancho_max > 0:
+		l.size = Vector2(ancho_max, 200)
+		l.clip_text = false
+		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_fondo.add_child(l)
 
 
@@ -119,7 +123,9 @@ func _puerta_interior(pos: Vector2, etiqueta: String) -> void:
 	_rect(pos, Vector2(56, 72), Color("#6B3A2A"))
 	_rect(pos + Vector2(4,  4), Vector2(22, 64), Color("#7A4535"))
 	_rect(pos + Vector2(30, 4), Vector2(22, 64), Color("#7A4535"))
-	_label(etiqueta, pos + Vector2(2, 76), 8, Color("#FFD080"))
+	# Fondo para la etiqueta
+	_rect(pos + Vector2(-20, 74), Vector2(96, 18), Color(0, 0, 0, 0.55))
+	_label(etiqueta, pos + Vector2(-18, 76), 8, Color("#FFD080"), 92)
 
 
 func _escritorio(pos: Vector2) -> void:
@@ -200,13 +206,15 @@ func _estante_libros(pos: Vector2, filas: int = 3) -> void:
 
 
 func _cuadro_enmarcado(pos: Vector2, tam: Vector2, color_marco: Color, color_interior: Color, texto: String = "") -> void:
+	if tam.x == 0 and tam.y == 0:
+		return
 	# Sombra
 	_rect(pos + Vector2(3, 3), tam + Vector2(4, 4), Color(0, 0, 0, 0.3))
 	# Marco
 	_rect(pos, tam + Vector2(4, 4), color_marco)
 	_rect(pos + Vector2(4, 4), tam - Vector2(4, 4), color_interior)
 	if texto != "":
-		_label(texto, pos + Vector2(6, 6), 7, color_marco.lightened(0.6))
+		_label(texto, pos + Vector2(6, 6), 8, color_marco.lightened(0.5), int(tam.x - 8))
 
 
 func _planta_grande(pos: Vector2) -> void:
