@@ -43,9 +43,12 @@ func _dibujar_fondo() -> void:
 	_rect(Vector2(124, 76), Vector2(12, 140), Color("#C8A860"))
 
 	# Estante de libros grande
+	_sombra(Vector2(148, 92), Vector2(82, 190))
 	_estante_libros(Vector2(148, 92), 5)
+	_colision(Vector2(148, 92), Vector2(82, 190))
 
 	# Credenza / mueble bajo detrás del escritorio
+	_sombra(Vector2(186, 116), Vector2(268, 50))
 	_rect(Vector2(186, 116), Vector2(268, 48), Color("#0A1428"))
 	_rect(Vector2(190, 120), Vector2(80, 40), Color("#152840"))
 	_rect(Vector2(274, 120), Vector2(80, 40), Color("#152840"))
@@ -55,12 +58,14 @@ func _dibujar_fondo() -> void:
 	_rect(Vector2(204, 104), Vector2(8, 6), Color("#C8A860"))
 	_rect(Vector2(282, 108), Vector2(16, 12), Color("#C0C0C0"))
 	_rect(Vector2(288, 104), Vector2(6, 6), Color("#A0A0A0"))
+	_colision(Vector2(186, 116), Vector2(268, 50))
 
 	# Cuadros en pared
 	_cuadro_enmarcado(Vector2(250, 68), Vector2(140, 80), Color("#F39C12"), Color("#0A1428"), "Visión 2030:\nMunicipio\nProspero y\nSustentable")
 	_cuadro_enmarcado(Vector2(536, 80), Vector2(80, 60), Color("#F39C12"), Color("#0A1428"), "Premio\nExcelencia\nBancaria\n2023")
 
 	# Escritorio gerencial grande y detallado
+	_sombra(Vector2(196, 182), Vector2(248, 90))
 	_rect(Vector2(196, 196), Vector2(248, 84), Color("#0A1428"))
 	_rect(Vector2(196, 184), Vector2(248, 14), Color("#1A3A6A"))
 	_rect(Vector2(196, 182), Vector2(248, 4), Color("#F39C12"))
@@ -77,6 +82,7 @@ func _dibujar_fondo() -> void:
 	# Portanombre
 	_rect(Vector2(208, 238), Vector2(96, 10), Color("#F39C12"))
 	_label("Lic. Ignacio Treviño — Gerente General", Vector2(196, 248), 6, Color("#F39C12"))
+	_colision(Vector2(196, 182), Vector2(248, 90))
 
 	# Silla gerencial
 	_rect(Vector2(280, 274), Vector2(80, 56), Color("#0A1428"))

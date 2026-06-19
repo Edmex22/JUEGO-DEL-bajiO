@@ -50,6 +50,7 @@ func _dibujar_fondo() -> void:
 	_label("GEL", Vector2(602, 80), 6, Color("#FFFFFF"))
 
 	# Mostrador de admisiones detallado
+	_colision(Vector2(130, 82), Vector2(380, 60))
 	_mostrador(Vector2(130, 92), 380, Color("#95A5A6"))
 	_label("ADMISIONES / RECEPCIÓN", Vector2(225, 100), 10, Color("#2C3E50"))
 	# Monitor en admisiones
@@ -79,11 +80,14 @@ func _dibujar_fondo() -> void:
 
 	# Camillas lado derecho
 	_rect(Vector2(468, 110), Vector2(130, 8), Color("#BDC3C7"))
+	_colision(Vector2(468, 116), Vector2(84, 50))
 	_cama_hospital(Vector2(472, 118))
 	_rect(Vector2(472, 118), Vector2(80, 6), Color("#3498DB"))
+	_colision(Vector2(468, 184), Vector2(84, 50))
 	_cama_hospital(Vector2(472, 186))
 
 	# Área de consultorios (partición)
+	_colision(Vector2(460, 100), Vector2(8, 250))
 	_rect(Vector2(464, 100), Vector2(6, 250), Color("#BDC3C7"))
 	_label("URGENCIAS", Vector2(476, 108), 8, Color("#E74C3C"))
 	_label("CONSULTA\nGENERAL", Vector2(476, 188), 8, Color("#1A5276"))

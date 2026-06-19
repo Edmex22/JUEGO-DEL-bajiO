@@ -36,6 +36,7 @@ func _dibujar_fondo() -> void:
 		_rect(Vector2(14 + i, 192), Vector2(2, 60), Color("#B0A070"))
 
 	# Fuente central más detallada
+	_colision(Vector2(258, 164), Vector2(124, 124))
 	_rect(Vector2(258, 164), Vector2(124, 124), Color("#1A5A8A"))
 	_rect(Vector2(264, 170), Vector2(112, 112), Color("#2980B9"))
 	# Borde de la fuente
@@ -82,9 +83,11 @@ func _dibujar_fondo() -> void:
 
 	# Kiosco de comida más detallado
 	_rect(Vector2(22, 22), Vector2(3, 3), Color("#5A3A1A"))  # base ya cubierta por árbol
+	_colision(Vector2(548, 280), Vector2(68, 80))
 	_kiosco(Vector2(548, 280))
 
 	# Zona de juegos infantiles
+	_colision(Vector2(22, 280), Vector2(160, 140))
 	_rect(Vector2(22, 280), Vector2(160, 140), Color("#F9E4B0"))
 	_rect(Vector2(26, 284), Vector2(152, 132), Color("#FAE8B8"))
 	_label("JUEGOS\nINFANTILES", Vector2(56, 310), 9, Color("#E74C3C"))

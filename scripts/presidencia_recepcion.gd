@@ -23,7 +23,9 @@ func _dibujar_fondo() -> void:
 	_rect(Vector2(619, 0), Vector2(3, alto),  Color("#B0A480"))
 
 	# Alfombra de espera
+	_sombra(Vector2(30, 230), Vector2(200, 160))
 	_alfombra(Vector2(30, 230), Vector2(200, 160), Color("#8B1A1A"))
+	_colision(Vector2(30, 230), Vector2(200, 160))
 
 	# Ventanas con cortinas
 	for wx in [70, 270, 470]:
@@ -56,6 +58,8 @@ func _dibujar_fondo() -> void:
 	_columna(Vector2(490, 68), 380)
 
 	# Mostrador de recepción mejorado
+	_sombra(Vector2(155, 148), Vector2(330, 60))
+	_colision(Vector2(155, 148), Vector2(330, 60))
 	_mostrador(Vector2(155, 155), 330, Color("#8B6914"))
 	# Teléfono sobre mostrador
 	_rect(Vector2(190, 145), Vector2(28, 10), Color("#222222"))

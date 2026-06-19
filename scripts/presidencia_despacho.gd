@@ -52,9 +52,12 @@ func _dibujar_fondo() -> void:
 	_cuadro_enmarcado(Vector2(28, 152), Vector2(76, 50), Color("#8B6914"), Color("#1A2A1A"), "Plan de\nGobierno\n2024-2027")
 
 	# Estante de libros lateral
+	_sombra(Vector2(28, 200), Vector2(80, 148))
 	_estante_libros(Vector2(28, 200), 4)
+	_colision(Vector2(28, 200), Vector2(80, 148))
 
 	# Credenza (mueble bajo detrás del escritorio)
+	_sombra(Vector2(186, 116), Vector2(268, 50))
 	_rect(Vector2(180, 116), Vector2(280, 44), Color("#3A1A05"))
 	_rect(Vector2(184, 120), Vector2(84, 36), Color("#4A2A10"))
 	_rect(Vector2(272, 120), Vector2(84, 36), Color("#4A2A10"))
@@ -63,8 +66,10 @@ func _dibujar_fondo() -> void:
 	_rect(Vector2(194, 112), Vector2(24, 10), Color("#C8A860"))  # trofeo
 	_rect(Vector2(274, 112), Vector2(16, 10), Color("#C8A860"))
 	_label("Alcalde 2024", Vector2(530, 122), 7, Color("#C8A860"))
+	_colision(Vector2(186, 116), Vector2(268, 50))
 
 	# Escritorio presidencial más detallado
+	_sombra(Vector2(196, 176), Vector2(248, 90))
 	_rect(Vector2(196, 188), Vector2(248, 76), Color("#3A1A05"))
 	_rect(Vector2(196, 176), Vector2(248, 14), Color("#5A2A10"))
 	_rect(Vector2(196, 174), Vector2(248, 4), Color("#C8A860"))
@@ -81,6 +86,7 @@ func _dibujar_fondo() -> void:
 	# Portanombre dorado
 	_rect(Vector2(208, 228), Vector2(80, 8), Color("#C8A860"))
 	_label("Presidente Municipal", Vector2(196, 232), 6, Color("#C8A860"))
+	_colision(Vector2(196, 176), Vector2(248, 90))
 
 	# Silla presidencial grande
 	_rect(Vector2(284, 258), Vector2(72, 52), Color("#5A1010"))

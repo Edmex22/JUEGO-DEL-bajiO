@@ -19,20 +19,31 @@ var _jugador_en_salida := false
 
 
 func _ready() -> void:
-	# Posición del jugador al entrar
 	if _jugador:
 		var pos := GameState.posicion_jugador_exterior
 		_jugador.position = pos if pos != Vector2.ZERO else Vector2(ancho / 2.0, alto - 60.0)
 
-	# Solo conecta si ZonaSalida no tiene su propio script (puerta.gd lo maneja solo)
 	if _zona_salida and not _zona_salida.get_script():
 		_zona_salida.body_entered.connect(_on_salida_entered)
 		_zona_salida.body_exited.connect(_on_salida_exited)
 
 	_dibujar_fondo()
+	_agregar_paredes()
 
 	if has_node("/root/Transicion"):
 		get_node("/root/Transicion").fade_in()
+
+
+func _agregar_paredes() -> void:
+	# Pared norte (incluye zona de muebles contra la pared)
+	_colision(Vector2(0, 0), Vector2(ancho, 92))
+	# Pared oeste
+	_colision(Vector2(0, 0), Vector2(22, alto))
+	# Pared este
+	_colision(Vector2(ancho - 22, 0), Vector2(22, alto))
+	# Borde sur (deja paso en el centro para la salida)
+	_colision(Vector2(0, alto - 20), Vector2(260, 20))
+	_colision(Vector2(380, alto - 20), Vector2(260, 20))
 
 
 func _dibujar_fondo() -> void:
@@ -62,7 +73,23 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				get_tree().change_scene_to_file(escena_destino)
 
 
-# ── Helpers de dibujo para subclases ─────────────────────────────────────────
+# ── Helpers de dibujo y colisión para subclases ──────────────────────────────
+
+func _colision(pos: Vector2, tam: Vector2) -> void:
+	var sb := StaticBody2D.new()
+	sb.position = pos
+	var cs := CollisionShape2D.new()
+	var shape := RectangleShape2D.new()
+	shape.size = tam
+	cs.position = tam / 2.0
+	cs.shape = shape
+	sb.add_child(cs)
+	add_child(sb)
+
+
+func _sombra(pos: Vector2, tam: Vector2, desplazamiento: Vector2 = Vector2(4, 6)) -> void:
+	_rect(pos + desplazamiento, tam, Color(0, 0, 0, 0.22))
+
 
 func _rect(pos: Vector2, size: Vector2, color: Color) -> void:
 	var r := ColorRect.new()

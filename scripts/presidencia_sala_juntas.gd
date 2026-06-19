@@ -55,6 +55,8 @@ func _dibujar_fondo() -> void:
 	_rect(Vector2(310, 86), Vector2(20, 3), Color("#FFFF80"))
 
 	# Mesa de juntas grande (ovalada simulada)
+	_sombra(Vector2(108, 190), Vector2(432, 152))
+	_colision(Vector2(104, 186), Vector2(432, 152))
 	_rect(Vector2(116, 186), Vector2(408, 152), Color("#4A2A08"))
 	_rect(Vector2(104, 214), Vector2(432, 96), Color("#4A2A08"))
 	_rect(Vector2(116, 184), Vector2(408, 14), Color("#6A4018"))

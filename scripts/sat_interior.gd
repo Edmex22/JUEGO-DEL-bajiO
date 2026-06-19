@@ -44,6 +44,7 @@ func _dibujar_fondo() -> void:
 	_label("03", Vector2(360, 86), 10, Color("#E74C3C"))
 
 	# Máquina de turnos
+	_colision(Vector2(22, 100), Vector2(54, 82))
 	_rect(Vector2(22, 100), Vector2(52, 80), Color("#2A2A2A"))
 	_rect(Vector2(26, 104), Vector2(44, 28), Color("#E74C3C"))
 	_label("TURNO", Vector2(32, 110), 8, Color("#FFFFFF"))
@@ -52,6 +53,7 @@ func _dibujar_fondo() -> void:
 
 	# Ventanillas de atención (4 ventanillas)
 	for i in range(4):
+		_colision(Vector2(30 + i * 150, 100), Vector2(130, 96))
 		_ventanilla(Vector2(30 + i * 150, 100), i + 1)
 
 	# Separadores de cola
@@ -67,6 +69,7 @@ func _dibujar_fondo() -> void:
 		_silla(Vector2(28 + sx * 84, 250))
 
 	# Archiveros laterales
+	_colision(Vector2(556, 100), Vector2(60, 158))
 	for i in range(3):
 		_rect(Vector2(560, 100 + i * 52), Vector2(56, 50), Color("#2A2A2A"))
 		_rect(Vector2(564, 104 + i * 52), Vector2(48, 18), Color("#333333"))
